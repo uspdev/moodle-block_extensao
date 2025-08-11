@@ -1,23 +1,40 @@
-# Cursos de Extensão USP
+Este plugin Moodle foi desenvolvido com o intuito de automatizar o processo de troca de informações entre o Moodle de Extensão da USP e a base de dados de extensão, que alimenta o sistema Apolo, além de facilitar o processo de criação de ambientes para os docentes de cursos de extensão.
 
-Projeto desenvolvido pela equipe de Moodle da USP.
+- CLI para sincronização de cursos e ministrantes com a base de dados da USP (Apolo);
+- Scheduler para sincronização diária às 00h01;
+- Visualização e inclusão de todos os docentes de uma turma, inclusive a criação de conta (Shibbolleth) e envio de e-mails para aqueles que ainda não têm acesso ao Moodle;
+- Interface individual para listagem e criação de turmas nas quais o usuário logado conste como docente;
+- Recuperação automática após exclusão de ambientes criados através do plugin.
 
-- [Talita Ventura](https://github.com/TalitaVentura16);
-- [Thiago Gomes Veríssimo](https://github.com/thiagogomesverissimo);
-- [Ricardo Fontoura](https://github.com/ricardfo);
-- [Octavio Augusto Potalej](https://github.com/Potalej).
+### Desenvolvimento 
 
-Instruções de instalação:
+Subindo um ambiente de desenvolvimento:
+
+    mkdir moodles
+    cd moodles
+    wget https://raw.githubusercontent.com/fflch/moodle4_composer/refs/heads/master/php.ini
+    git clone -b extensao git@gitlab.uspdigital.usp.br:atp/moodle.git moodle-extensao
+    php -S 0.0.0.0:8888 -t moodle-extensao -c php.ini
+
+Endereço para login: http://0.0.0.0:8888/acessar/
+
+Mudanças:
+
+- Em "Aparência" -> "Temas" -> "USP Extensão 2".
+- Blocos usados: Cursos acessados recentemente, Usuários Online
+- No perfil -> Modificar -> Opcional -> Número de identificação: colocar número USP
+- Configuração em email mailtrap
+- 
+
+
+#### Colocando esse bloco para dev:
 
     cd blocks
-    git clone https://github.com/SEU-FORK/moodle-block_extensao.git extensao
-    cd extensao
+    rm -rf extensao
+    git clone git@gitlab.uspdigital.usp.br:atp/moodle-block_extensao.git extensao
 
-Referências:
 
-- https://gitlab.uspdigital.usp.br/atp/moodle/-/tree/edisc/blocks/usp_cursos
 
-Para mais informações, consulte a [Wiki](https://github.com/moodle-usp/moodle-block_extensao/wiki).
 
 ## Configurações
 
@@ -80,3 +97,51 @@ Listagem de turmas com quantidades de ministrantes:
 Dado um turma com codofeatvceu igual a 90509, listar seus ministrantes:
 
     select codpes from block_extensao_ministrante where codofeatvceu = 90509;
+
+### Plugins usado no moodle extensão:
+
+Blocks:
+
+    blocks/extensao (Custom block)
+    blocks/advnotifications (Advanced Notifications block)
+    blocks/configurable_reports (Configurable Reports block)
+    blocks/feedback (Feedback block)
+    blocks/game (Game block)
+    blocks/lp (Learning Plan block)
+    blocks/point_view (Point View block)
+    blocks/workflow (Workflow block)
+    blocks/xp (XP block, likely for "Level Up XP" plugin)
+
+Local Plugins:
+
+    local/commander (Custom plugin)
+    local/mass_enroll (Mass Enrollment plugin)
+
+Mod Plugins (Activities/Resources):
+
+    mod/coursecertificate (Course Certificate module)
+    mod/dialogue (Dialogue activity)
+    mod/diary (Diary activity)
+    mod/googlemeet (Google Meet integration)
+    mod/hvp (H5P third-party plugin, though H5P is now core in newer versions)
+    mod/pdfannotator (PDF Annotator activity)
+    mod/publication (Publication activity)
+    mod/quizgame (Quiz Game activity)
+    mod/simplecertificate (Simple Certificate module)
+    mod/studentquiz (StudentQuiz activity)
+    mod/vpl (Virtual Programming Lab)
+
+Theme:
+
+    theme/extensao2 (Custom theme, likely for "Extensão" functionality)
+    theme/moove (Third-party theme, not part of core Moodle)
+
+Other:
+
+    extensao (Top-level custom directory, possibly a custom plugin or theme component)
+    filter/filtercodes (Filter Codes plugin)
+    filter/generico (Generico filter plugin)
+
+Referências:
+
+- https://gitlab.uspdigital.usp.br/atp/moodle/-/tree/edisc/blocks/usp_cursos
