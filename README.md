@@ -9,7 +9,7 @@ O plugin possui as seguintes configurações:
     - Senha.
 - Envio de e-mails:
     - Texto enviado para novos usuários. Contém tokens de substituição;
-- Tabelas da base de dados ([ver relação do CEPAVIEW](#mapeamento-cepaview)):
+- Tabelas da base de dados:
     - Oferecimento do curso/turma. Padrão: `OFERECIMENTOATIVIDADECEU`;
     - Informações do curso. Padrão: `CURSOCEU`;
     - Informações da edição do curso. Padrão: `EDICAOCURSOOFECEU`;
@@ -21,12 +21,6 @@ O plugin possui as seguintes configurações:
 - Busca de cursos:
     - Período de busca de turmas: 3, 6, 9 meses ou 1 ano.
 
-## Sincronização com o Apolo
+## Task para sincronização com o Apolo
 
-Configurados os dados de acesso à base, para sincronizar com o Sistema Apolo, rode:
-
-    php cli/sync.php
-
-Para mais informações, há a opção de ajuda:
-
-    php cli/sync.php -h
+    admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar"
