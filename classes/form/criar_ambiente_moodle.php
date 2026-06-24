@@ -1,88 +1,10 @@
 <?php
-/**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
- * # Forms
- * Para facilitar o trabalho com formularios, este arquivo os centraliza. Assim eh
- * mais facil de encontrar a origem dos formularios e fazer alteracoes quando
- * necessario.
- */
 
-require_once(__DIR__ . '/../../../config.php');
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once(__DIR__ . '/../src/Ambiente.php');
-require_once(__DIR__ . '/../src/Turmas.php');
-require_once(__DIR__ . '/../src/Atuacao.php');
-
-// formulario para os docentes criarem um ambiente para um curso (versao select)
-
-class redirecionamento_criacao_ambiente_select extends moodleform {
-  public function definition () {
-    global $CFG, $DB;
-    // Captura a lista de cursos
-    if (isset($this->_customdata['cursos'])) 
-        $cursos = $this->_customdata['cursos'];
-    else 
-        $cursos = [];
-
-    $options = array();
-    foreach ($cursos as $indice => $nome_curso) {
-      $turma = $DB->get_record('block_extensao_turma', ['codofeatvceu'=>$indice]);
-  
-      // Convertendo o formato da data
-      $Inicio = !is_null($turma->dtainiofeatv) ? "(".date('d-m-Y', $turma->dtainiofeatv).")" : '';
-  
-      // Formatado com a data de inicio entre parenteses;
-      $option_label = "$nome_curso $Inicio";
-      $options[$indice] = $option_label;
-    }
-  
-    $options = array('placeholder' => "Buscar") + $options;
-    $this->_form->addElement('autocomplete', 'select_ambiente', 'Buscar por turma', $options);
-
-    // botao de ajuda com os cursos disponiveis para o ministrante 
-    $this->_form->addHelpButton('select_ambiente',  'cursos_disponiveis', 'block_extensao');
-
-
-    // botao de submit
-    $this->_form->addElement('submit', 'redirecionar_criar_ambiente', 'Criar ambiente');
-  }
-}
-
-// formulario para os docentes criarem um ambiente para um curso (versao lista com 5 ou menos cursos)
-class redirecionamento_criacao_ambiente_lista extends moodleform {
-  public function definition () {
-    global $CFG, $DB;
-
-    // input hidden com o id da turma no plugin Extensao
-    $codofeatvceu = "";
-    if (isset($this->_customdata['codofeatvceu'])) {
-      $codofeatvceu = $this->_customdata['codofeatvceu'];
-
-      // Obter informacoes do curso
-      $curso = Turmas::info_turma_id_extensao($codofeatvceu);
-      $nomeCurso = $curso->nome_curso_apolo;
-      $dataInicio = $curso->dtainiofeatv;
-
-      // Formatando a data de inicio
-      $dataInicioFormatada = is_null($dataInicio) ? '-' : date('d/m/Y', $dataInicio);
-      $inicioFormatado = "<span style='color: red; font-weight: bold'>".$dataInicioFormatada."</span>";
-
-      // Construindo o rotulo do curso com a data de inicio estilizada
-      $labelCurso = "Inicia em: $inicioFormatado";
-
-      // Adicionando o elemento de texto com o nome do curso e a data de inicio estilizada
-      $this->_form->addElement('static', 'curso_com_data_inicio', $labelCurso);
-    }
-    $this->_form->addElement('hidden', 'codofeatvceu', $codofeatvceu);
-    $this->_form->setType('codofeatvceu', PARAM_TEXT);
-
-    // botao de submit
-    $this->_form->addElement('submit', 'redirecionar_criar_ambiente', 'Criar ambiente');
-  }
-}
+require_once(__DIR__ . '/../../src/Ambiente.php');
+require_once(__DIR__ . '/../../src/Turmas.php');
+require_once(__DIR__ . '/../../src/Atuacao.php');
 
 // formulario para a criacao de ambientes no Moodle
 class criar_ambiente_moodle extends moodleform {

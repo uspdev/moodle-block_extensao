@@ -1,16 +1,4 @@
 <?php
-/**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
- * Aqui eh necessario capturar as informacoes que vieram do forms atraves
- * do autocomplete e mostrar ao usuario/docente as informacoes basicas do 
- * ambiente que esta criando.
- * 
- * Esta pagina processa tanto o formulario da pagina inicial quanto o
- * formulario para a criacao do ambiente de fato.
- */
 
 require_once(__DIR__ . '/../../../config.php');
 global $USER, $PAGE, $OUTPUT;
@@ -21,7 +9,6 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_heading(get_string('pluginname', 'block_extensao'));
 require_login();
 
-require_once(__DIR__ . '/../utils/forms.php');
 require_once(__DIR__ . '/../src/Turmas.php');
 require_once(__DIR__ . '/../src/Ambiente.php');
 require_once(__DIR__ . '/../src/Categorias.php');
@@ -42,7 +29,7 @@ if (isset($_SESSION['codofeatvceu'])) {
   // captura os outros ministrantes a partir do codofeatvceu
   $ministrantes = Usuario::ministrantes_turma($_SESSION['codofeatvceu'], $USER->username);
   // cria o formulario para capturar as informacoes
-  $forms = new criar_ambiente_moodle('', array('ministrantes' => $ministrantes));
+  $forms = new \block_extensao\form\criar_ambiente_moodle('', array('ministrantes' => $ministrantes));
   $info_forms = $forms->get_data();  
   
   // se tiver algo, entao sao dados validados e pode criar o curso
@@ -80,9 +67,9 @@ if (!empty($categorias)) {
 }
 
 // Gera os formularios para capturar o codfeatvceu
-$forms_select = new redirecionamento_criacao_ambiente_select('', array('cursos'=>$cursos));
+$forms_select = new \block_extensao\form\redirecionamento_criacao_ambiente_select('', array('cursos'=>$cursos));
 $info_forms_select = $forms_select->get_data();
-$forms_lista = new redirecionamento_criacao_ambiente_lista('', array('cursos'=>$cursos));
+$forms_lista = new \block_extensao\form\redirecionamento_criacao_ambiente_lista('', array('cursos'=>$cursos));
 $info_forms_lista = $forms_lista->get_data();
 
 // Tenta primeiro com o de select
@@ -135,7 +122,7 @@ $informacoes_turma = Turmas::info_turma_id_extensao($codofeatvceu);
 $ministrantes = Usuario::ministrantes_turma($codofeatvceu, $USER->username);
 
 // Cria o formulario
-$formulario = new criar_ambiente_moodle('', array(
+$formulario = new \block_extensao\form\criar_ambiente_moodle('', array(
   'codofeatvceu' => $codofeatvceu,
   'shortname' => $codofeatvceu,
   'fullname' => $informacoes_turma->nome_curso_apolo,

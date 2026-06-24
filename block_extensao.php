@@ -14,7 +14,6 @@
 require_once(__DIR__ . '/../../config.php');
 require_once('src/Turmas.php');
 require_once('src/Categorias.php');
-require_once('utils/forms.php');
 
 class block_extensao extends block_base {
     public function init() {
@@ -65,7 +64,7 @@ class block_extensao extends block_base {
             foreach ($cursos as $codofeatvceu => $nome_curso) {
                 // cria um formulario
                 $formurl = new moodle_url('/blocks/extensao/pages/criar_ambiente.php');
-                $form = new redirecionamento_criacao_ambiente_lista($formurl, array('codofeatvceu' => $codofeatvceu));    
+                $form = new \block_extensao\form\redirecionamento_criacao_ambiente_lista($formurl, array('codofeatvceu' => $codofeatvceu));    
                 $cursos_docente[] = array(
                     'nome_curso_apolo' => $nome_curso,
                     'formulario_curso' => $form->render()
@@ -76,7 +75,7 @@ class block_extensao extends block_base {
         // Formulario como select
         else {
             $formurl = new moodle_url('/blocks/extensao/pages/criar_ambiente.php');
-            $formulario = new redirecionamento_criacao_ambiente_select($formurl, array('cursos'=>$cursos));
+            $formulario = new \block_extensao\form\redirecionamento_criacao_ambiente_select($formurl, array('cursos'=>$cursos));
             $infos['formulario'] = $formulario->render();
         }
 
