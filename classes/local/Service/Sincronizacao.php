@@ -1,18 +1,12 @@
 <?php
-/**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
- * Aqui eh feita a sincronizacao de fato, constam as funcoes de
- * salvar dados, gerar objetos, buscar na Query, etc.
- * 
- * A classe Sincronizar eh chamada em:
- * - cli/sync.php
- */
+
+namespace block_extensao\local\Service;
+
 require_once('Query.php');
-use block_extensao\Service\Query;
+
+use block_extensao\local\Service\Query;
 use core\notification;
+
 require_once(__DIR__ . '/../Edicao.php');
 
 

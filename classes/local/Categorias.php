@@ -1,7 +1,6 @@
 <?php
-/**
- * Manipulacao das categorias de curso
- */
+
+namespace block_extensao\local;
 defined('MOODLE_INTERNAL') || die();
 
 class Categorias {

@@ -9,9 +9,15 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_heading(get_string('pluginname', 'block_extensao'));
 require_login();
 
-require_once(__DIR__ . '/../src/Turmas.php');
-require_once(__DIR__ . '/../src/Ambiente.php');
-require_once(__DIR__ . '/../src/Categorias.php');
+require_once(__DIR__ . '/../classes/local/Turmas.php');
+require_once(__DIR__ . '/../classes/local/Ambiente.php');
+require_once(__DIR__ . '/../classes/local/Categorias.php');
+require_once(__DIR__ . '/../classes/local/Usuario.php');
+
+use block_extensao\local\Turmas;
+use block_extensao\local\Ambiente;
+use block_extensao\local\Categorias;
+use block_extensao\local\Usuario;
 
  /*
 /**

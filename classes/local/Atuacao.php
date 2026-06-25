@@ -1,5 +1,8 @@
 <?php
 
+namespace block_extensao\local;
+defined('MOODLE_INTERNAL') || die();
+
 class Atuacao {
   /**
    * Relacao atual:

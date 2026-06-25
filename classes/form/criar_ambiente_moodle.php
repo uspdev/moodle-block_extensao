@@ -1,13 +1,18 @@
 <?php
 
+namespace block_extensao\form;
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once(__DIR__ . '/../../src/Ambiente.php');
-require_once(__DIR__ . '/../../src/Turmas.php');
-require_once(__DIR__ . '/../../src/Atuacao.php');
+
+use block_extensao\local\Turmas;
+use block_extensao\local\Ambiente;
+use block_extensao\local\Atuacao;
 
 // formulario para a criacao de ambientes no Moodle
-class criar_ambiente_moodle extends moodleform {
+class criar_ambiente_moodle extends \moodleform {
   public function definition () {
     global $CFG;
 

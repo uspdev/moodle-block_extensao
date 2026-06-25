@@ -1,4 +1,8 @@
 <?php
+
+namespace block_extensao\local;
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Manipulacao de informacoes relacionadas as Atividades de Edicao dos Cursos de Extensao
  */
@@ -6,7 +10,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/Service/Query.php');
-use block_extensao\Service\Query;
+use block_extensao\local\Service\Query;
 
 class Edicao {
 

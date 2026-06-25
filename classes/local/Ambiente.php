@@ -1,24 +1,18 @@
 <?php
 
-/**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
- * # Ambientes Moodle
- * Neste arquivo ficam as questoes relativas a criacao de ambientes
- * Moodle (cursos). Isso eh usado pelos docentes quando ha turmas
- * abertas em seu nome, por exemplo.
- */
+namespace block_extensao\local;
+defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/../../../config.php');
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php'); // biblioteca de cursos
+
 require_once(__DIR__ . '/Turmas.php');
 require_once(__DIR__ . '/Usuario.php');
 require_once(__DIR__ . '/Service/Sincronizacao.php');
 require_once(__DIR__ . '/Service/Query.php');
 
-use block_extensao\Service\Query;
+use block_extensao\local\Service\Query;
+use block_extensao\local\Service\Sincronizar;
 
 class Ambiente {
 
@@ -153,7 +147,7 @@ class Ambiente {
    */
   public static function criar_objeto_curso ($info_forms, $info_curso_apolo) {
     global $DB;    
-    $curso = new stdClass;
+    $curso = new \stdClass;
     
     $curso->shortname = $info_forms->shortname;
     $curso->fullname = $info_forms->fullname;

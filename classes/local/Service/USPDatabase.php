@@ -1,6 +1,6 @@
 <?php
 
-namespace block_extensao\Service;
+namespace block_extensao\local\Service;
 
 use PDO;
 

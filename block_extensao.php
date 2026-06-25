@@ -1,9 +1,5 @@
 <?php
 /**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
  * Este eh o bloco. Se verifica se o usuario possui um numero USP em seu 
  * cadastro no Moodle (idnumber), e se possuir verifica se tem algum
  * curso associado na base sincronizada com o Apolo, apresentando botoes
@@ -12,8 +8,15 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
-require_once('src/Turmas.php');
-require_once('src/Categorias.php');
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir . '/formslib.php');
+
+require_once('classes/local/Turmas.php');
+require_once('classes/local/Categorias.php');
+
+use block_extensao\local\Turmas;
+use block_extensao\local\Categorias;
 
 class block_extensao extends block_base {
     public function init() {
@@ -78,6 +81,13 @@ class block_extensao extends block_base {
             $formulario = new \block_extensao\form\redirecionamento_criacao_ambiente_select($formurl, array('cursos'=>$cursos));
             $infos['formulario'] = $formulario->render();
         }
+
+        // Estratégia para capturamos se usuário é admin e usarmos no mustache
+        $context = context_system::instance();
+        $infos['is_admin'] = has_capability('moodle/site:config', $context);
+
+        // Link para página de gerencia de ambientes
+        $infos['url_ambientes'] = (new moodle_url('/blocks/extensao/pages/ambientes.php'))->out(false);
 
         // template
         $this->content->text = $OUTPUT->render_from_template('block_extensao/extensao_block', $infos);

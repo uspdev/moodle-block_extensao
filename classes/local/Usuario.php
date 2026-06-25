@@ -1,15 +1,9 @@
 <?php
-/**
- * Cursos de Extensao (Bloco)
- * Equipe de Moodle da USP
- * https://github.com/moodle-usp
- * 
- * # Usuario
- * A ideia desse arquivo eh mexer com usuarios do Moodle, como na inscricao de
- * usuarios em cursos, atribuicao de papeis, etc.
- */
 
-require_once(__DIR__ . '/../../../config.php');
+namespace block_extensao\local;
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once(__DIR__ . '/Turmas.php');
 require_once(__DIR__ . '/Notificacoes.php');
@@ -34,7 +28,7 @@ class Usuario {
     // faz o 'enrol' entre o usuario e a instancia com o devido papel
     $plugin->enrol_user($instancia, $id_usuario, $id_papel);
     // captura o contexto do sistema
-    $contexto = context_system::instance();
+    $contexto = \context_system::instance();
     // define o usuario com o devido papel no devido contexto
     role_assign($id_papel, $id_usuario, $contexto->id);
   }
@@ -211,7 +205,7 @@ class Usuario {
     $primeiroNome = array_shift($partesNome);
     $segundoNome = implode(" ", $partesNome); 
 
-    $novoUsuario = new stdClass();
+    $novoUsuario = new \stdClass();
     $novoUsuario->username = (string) $usuario->codpes;
     $novoUsuario->idnumber = $usuario->codpes;
     $novoUsuario->firstname = $primeiroNome;

@@ -11,6 +11,7 @@
  */
 
 namespace block_extensao\task;
+
 require_once(__DIR__ . '/../../src/Service/Sincronizacao.php');
 
 class sincronizar extends \core\task\scheduled_task {

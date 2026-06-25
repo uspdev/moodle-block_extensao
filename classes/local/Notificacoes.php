@@ -1,4 +1,6 @@
 <?php
+
+namespace block_extensao\local;
 defined('MOODLE_INTERNAL') || die();
 
 use core\message\message;

@@ -1,14 +1,19 @@
 <?php
 
-require_once(__DIR__ . '/../../../config.php');
+namespace block_extensao\form;
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once(__DIR__ . '/../src/Ambiente.php');
-require_once(__DIR__ . '/../src/Turmas.php');
-require_once(__DIR__ . '/../src/Atuacao.php');
+
+use block_extensao\local\Turmas;
+use block_extensao\local\Ambiente;
+use block_extensao\local\Atuacao;
 
 // formulario para os docentes criarem um ambiente para um curso (versao select)
 
-class redirecionamento_criacao_ambiente_select extends moodleform {
+class redirecionamento_criacao_ambiente_select extends \moodleform {
   public function definition () {
     global $CFG, $DB;
     // Captura a lista de cursos

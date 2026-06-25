@@ -1,0 +1,132 @@
+<div class="block-extensao-ambientes">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <form method="get" action="{{url_acao}}" class="row g-2 align-items-end">
+
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Nome do curso</label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        class="form-control"
+                        placeholder="Buscar nome do curso..."
+                        value="{{valor_busca}}">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="datainicio" class="form-label">Data inicial</label>
+                    <input
+                        type="date"
+                        id="datainicio"
+                        name="datainicio"
+                        class="form-control"
+                        value="{{datainicio}}"
+                        required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="datafim" class="form-label">Data final</label>
+                    <input
+                        type="date"
+                        id="datafim"
+                        name="datafim"
+                        class="form-control"
+                        value="{{datafim}}"
+                        required>
+                </div>
+
+                <div class="col-md-1">
+                    <label for="filtro_moodle" class="form-label">Moodle</label>
+                    <select id="filtro_moodle" name="filtro_moodle" class="form-select">
+                        <option value="" {{#filtro_moodle_todos}}selected{{/filtro_moodle_todos}}>Todos</option>
+                        <option value="com" {{#filtro_moodle_com}}selected{{/filtro_moodle_com}}>Criado</option>
+                        <option value="sem" {{#filtro_moodle_sem}}selected{{/filtro_moodle_sem}}>Não criado</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i> Buscar
+                    </button>
+
+                    <a href="{{url_acao}}" class="btn btn-outline-secondary">
+                        Limpar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome do Curso (Apolo)</th>
+                    <th>Responsáveis</th>
+                    <th>Ministrantes</th>
+                    <th>Curso no Moodle</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#turmas}}
+                <tr>
+                    <td><a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterAtividade?cod_oferecimentoatv={{codofeatvceu}}">{{codofeatvceu}}</a> - {{nome_curso_apolo}}</td>
+                    <td>
+                        {{#tem_responsaveis}}
+                            <ul class="list-unstyled mb-0">
+                                {{#responsaveis}}
+                                    <li><i class="fa fa-user text-muted small"></i> {{nome}}</li>
+                                {{/responsaveis}}
+                            </ul>
+                        {{/tem_responsaveis}}
+                        
+                        {{^tem_responsaveis}}
+                            <span class="text-muted">-</span>
+                        {{/tem_responsaveis}}
+                    </td>
+                    
+                    <td>
+                        {{#tem_ministrantes}}
+                            <ul class="list-unstyled mb-0">
+                                {{#ministrantes}}
+                                    <li><i class="fa fa-graduation-cap text-muted small"></i> {{nome}}</li>
+                                {{/ministrantes}}
+                            </ul>
+                        {{/tem_ministrantes}}
+                        
+                        {{^tem_ministrantes}}
+                            <span class="text-muted">-</span>
+                        {{/tem_ministrantes}}
+                    </td>
+                    <td>
+                        {{#id_moodle}}
+                            <a href="{{wwwroot}}/course/view.php?id={{id_moodle}}">
+                                Acessar
+                            </a>
+                        {{/id_moodle}}
+
+                        {{^id_moodle}}
+                            <span class="text-muted">Não criado</span>
+                        {{/id_moodle}}
+                    </td>
+                    <td>{{data_inicio}}</td>
+                    <td>{{data_fim}}</td>
+                </tr>
+                {{/turmas}}
+
+                {{^tem_registros}}
+                <tr>
+                    <td colspan="4" class="text-center p-4">
+                        <p class="mb-0 text-muted">Nenhuma turma encontrada.</p>
+                    </td>
+                </tr>
+                {{/tem_registros}}
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -8,9 +8,9 @@
  * Aqui ficam as queries que fazem a conexao com o Sistema Apolo.
  */
 
-namespace block_extensao\Service;
+namespace block_extensao\local\Service;
 
-use stdClass;
+use \stdClass;
 
 require_once('USPDatabase.php');
 
