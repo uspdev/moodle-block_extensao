@@ -12,7 +12,8 @@
 
 namespace block_extensao\task;
 
-require_once(__DIR__ . '/../../src/Service/Sincronizacao.php');
+require_once(__DIR__ . '/../local/Service/Populate.php');
+use block_extensao\local\Service\Populate;
 
 class sincronizar extends \core\task\scheduled_task {
 
@@ -30,9 +31,8 @@ class sincronizar extends \core\task\scheduled_task {
    */
   public function execute () {
     try {
-      // Faz a sincronizacao
-      $sinc = new \Sincronizar();
-      $sinc->sincronizar(['pular_ministrantes'=>false]);      
+      $populate = new Populate();
+      $populate->sincronizar(['pular_ministrantes'=>false]);      
     } catch (Exception $e) {
       echo 'Erro: ' . $e->getMessage();
     }

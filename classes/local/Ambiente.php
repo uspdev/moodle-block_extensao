@@ -8,11 +8,11 @@ require_once($CFG->dirroot.'/course/lib.php'); // biblioteca de cursos
 
 require_once(__DIR__ . '/Turmas.php');
 require_once(__DIR__ . '/Usuario.php');
-require_once(__DIR__ . '/Service/Sincronizacao.php');
+require_once(__DIR__ . '/Service/Populate.php');
 require_once(__DIR__ . '/Service/Query.php');
 
 use block_extensao\local\Service\Query;
-use block_extensao\local\Service\Sincronizar;
+use block_extensao\local\Service\Populate;
 
 class Ambiente {
 
@@ -65,7 +65,7 @@ class Ambiente {
     \core\notification::success('Ambiente criado com sucesso!');
 
     // Por fim eh preenchido o campo sincronizado_apolo com 1 em relacao ao curso que foi criado
-    Sincronizar::sincronizadoApolo($moodle_curso->id);
+    Populate::sincronizadoApolo($moodle_curso->id);
 
     // inscreve o usuario logado no curso
     Usuario::inscreve_criador($moodle_curso->id, $info_forms->codofeatvceu);

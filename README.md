@@ -24,3 +24,4 @@ O plugin possui as seguintes configurações:
 ## Task para sincronização com o Apolo
 
     admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar"
+

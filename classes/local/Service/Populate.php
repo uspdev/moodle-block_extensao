@@ -10,7 +10,7 @@ use core\notification;
 require_once(__DIR__ . '/../Edicao.php');
 
 
-class Sincronizar {
+class Populate {
 
   /**
    * Apenas para nao inicializar com o metodo homonimo
@@ -153,7 +153,7 @@ class Sincronizar {
     date_default_timezone_set('America/Sao_Paulo');
     $turmas_objetos = array();
     foreach ($turmas as $turma) {
-      $obj = new stdClass;
+      $obj = new \stdClass;
       $obj->codofeatvceu = $turma['codofeatvceu'];
       $obj->nome_curso_apolo = $turma['nomcurceu'];
       $obj->codund = $turma['codund'];
@@ -311,7 +311,7 @@ class Sincronizar {
    */
   private function objetoMinistrantes (array $ministrantes) {
     return array_map(function($ministrante) {
-      $obj = new stdClass;
+      $obj = new \stdClass;
       $obj->codofeatvceu = $ministrante['codofeatvceu'];
       $obj->codpes = $ministrante['codpes'];
       $obj->codatc = $ministrante['codatc'];
