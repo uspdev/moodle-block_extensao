@@ -7,7 +7,7 @@ function xmldb_block_extensao_upgrade($versaoAnterior) {
 
     $dbman = $DB->get_manager();
 
-    // 2026062501: Remove o campo "codedicurceu" do banco de dados
+    // 2026062501: Remove o campo "codedicurceu" da tabela block_extensao_ministrante
     if ($versaoAnterior < 2026062501) {
         $tabela = new xmldb_table('block_extensao_ministrante');
         $campo_codedicurceu = new xmldb_field('codedicurceu');
