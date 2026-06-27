@@ -80,6 +80,7 @@ class Ambiente {
 
     // 3. Joga a tarefa na fila do Moodle
     \core\task\manager::queue_adhoc_task($task_matriculados);
+    \core\notification::success('Alunos em processo de sincronização, pode levar algumas horas.');
 
     // Por fim eh preenchido o campo sincronizado_apolo com 1 em relacao ao curso que foi criado
     Populate::sincronizadoApolo($moodle_curso->id);

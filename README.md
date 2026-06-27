@@ -27,5 +27,10 @@ O plugin possui as seguintes configurações:
 
 Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso - como todos responsáveis são adicionados como ministrantes, pode remover a lógica anterior
 
-Arrumr quem chama informacoesUsuario, pois agora reotrna array
 
+docker exec -it moodleusp php moodle/admin/cli/cron.php
+
+
+fazer um task shceduled para atualizar os estudantes
+
+na matricula dos estuantes, fazer um merge?
