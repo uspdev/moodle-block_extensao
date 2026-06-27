@@ -221,6 +221,7 @@ class Usuario {
     $novoUsuario->lastname = $segundoNome;
     $novoUsuario->email = $usuario->codema;
     $novoUsuario->auth = 'shibboleth';
+    $novoUsuario->confirmed = 1;
 
     try {
       // Chama a funcao user_create_user() para cadastrar o novo usuario

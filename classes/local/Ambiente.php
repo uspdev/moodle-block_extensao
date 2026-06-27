@@ -10,9 +10,12 @@ require_once(__DIR__ . '/Turmas.php');
 require_once(__DIR__ . '/Usuario.php');
 require_once(__DIR__ . '/Service/Populate.php');
 require_once(__DIR__ . '/Service/Query.php');
+require_once(__DIR__ . '../../task/matriculados_task.php');
 
 use block_extensao\local\Service\Query;
 use block_extensao\local\Service\Populate;
+use block_extensao\local\Matriculados;
+use block_extensao\task\matriculados_task;
 
 class Ambiente {
 
@@ -63,6 +66,20 @@ class Ambiente {
     // se der certo, eh necessario salvar isso na base
     Turmas::atualizar_id_moodle_turma($info_forms->codofeatvceu, $moodle_curso->id);
     \core\notification::success('Ambiente criado com sucesso!');
+
+    //// Matricula os estudantes no curso
+    //Matriculados::cria_matriculados($info_forms->codofeatvceu, $moodle_curso->id);
+    // 1. Prepara os dados para tarefa
+    $matriculados = new \stdClass();
+    $matriculados->codofeatvceu = $info_forms->codofeatvceu;
+    $matriculados->courseid     = $moodle_curso->id;
+
+    // 2. Instancia a nova tarefa adhoc
+    $task_matriculados = new matriculados_task();
+    $task_matriculados->set_custom_data($matriculados);
+
+    // 3. Joga a tarefa na fila do Moodle
+    \core\task\manager::queue_adhoc_task($task_matriculados);
 
     // Por fim eh preenchido o campo sincronizado_apolo com 1 em relacao ao curso que foi criado
     Populate::sincronizadoApolo($moodle_curso->id);
@@ -120,6 +137,7 @@ class Ambiente {
         $atuacao = Usuario::atuacao_ceu($usuario_moodle->idnumber, $info_forms->codofeatvceu);
         // matricula o professor
         Usuario::matricula_professor($moodle_curso->id, $ministrante->id, $atuacao->codatc);
+
         // nome do cargo
         $shortname_adaptado = $atuacao->dscatc;
         // notificacao

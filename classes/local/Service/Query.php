@@ -194,12 +194,15 @@ class Query
    * @return object
    */
   public function informacoesUsuario($array_de_codpes) {
+    
+  if (empty($array_de_codpes)) return [];
+
     $string_de_codpes = implode(', ', $array_de_codpes);
 
     $query = 
     "SELECT
         p.codpes,
-        p.nompes,
+        p.nompesttd as nompes,
           COALESCE(email_preferencial.codema, email_disponivel.codema) AS codema
       FROM " . $this->PESSOA . "  p
           LEFT JOIN
@@ -250,18 +253,7 @@ class Query
    * @return array
    */
   public function responsavelEdicao ($codofeatvceu_turmas) {
-
-      $periodo = get_config('block_extensao', 'periodo_curso');
-    $diaAtual = date("Y-m-d");
-
-    if (in_array($periodo, ["3", "6", "9"]))
-      $periodo_str = "-$periodo months";
-    else
-      $periodo_str = "-1 year";
-    $inicio_curso = date("Y-m-d", strtotime($periodo_str, strtotime($diaAtual)));
-
     $turmas = implode(', ', $codofeatvceu_turmas);
-    
     $query = " 
       SELECT 
           r.codpes, 
@@ -272,11 +264,35 @@ class Query
         AND r.codedicurceu = o.codedicurceu
         AND r.codund = o.codund
       WHERE o.codofeatvceu IN ($turmas)
-        AND o.dtainiofeatv >= '$inicio_curso'
         AND r.codpes IS NOT NULL
       ORDER BY o.codofeatvceu
     ";
     return USPDatabase::fetchAll($query);
+  }
+
+  /**
+   * lista de codpes matriculados
+   * @param int $codpes 
+   * @return array
+   */
+  public function matriculados ($codofeatvceu) {
+    $query = " 
+      SELECT DISTINCT
+          m.codpes
+      FROM MATRICULACURSOCEU m
+      INNER JOIN MATRICULAATIVIDADECEU ma
+        ON ma.codmtrcurceu = m.codmtrcurceu
+      INNER JOIN OFERECIMENTOATIVIDADECEU o
+        ON ma.codofeatvceu = o.codofeatvceu
+      WHERE o.codofeatvceu = convert(int,$codofeatvceu)
+        AND o.codedicurceu = o.codedicurceu
+        AND m.codund = o.codund
+        AND ma.stamtratvceu = 'M'
+    ";
+    $result = USPDatabase::fetchAll($query);
+    if($result)
+      return array_column($result, 'codpes');
+    return [];
   }
 
 }
