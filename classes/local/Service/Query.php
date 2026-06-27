@@ -33,6 +33,8 @@ class Query
     $this->CAMPUS                   = get_config('block_extensao', 'tabela_campus');
     $this->PESSOA                   = get_config('block_extensao', 'tabela_pessoa');
     $this->RESPONSAVELEDICAOCEU     = get_config('block_extensao', 'tabela_responsaveledicaoceu');
+    $this->MATRICULACURSOCEU        = get_config('block_extensao', 'tabela_matriculacursoceu');
+    $this->MATRICULAATIVIDADECEU    = get_config('block_extensao', 'tabela_matriculaatividadeceu');
   }
 
   /**
@@ -279,10 +281,10 @@ class Query
     $query = " 
       SELECT DISTINCT
           m.codpes
-      FROM MATRICULACURSOCEU m
-      INNER JOIN MATRICULAATIVIDADECEU ma
+      FROM " . $this->MATRICULACURSOCEU . " m
+      INNER JOIN " . $this->MATRICULAATIVIDADECEU . "  ma
         ON ma.codmtrcurceu = m.codmtrcurceu
-      INNER JOIN OFERECIMENTOATIVIDADECEU o
+      INNER JOIN " . $this->OFERECIMENTOATIVIDADECEU . "  o
         ON ma.codofeatvceu = o.codofeatvceu
       WHERE o.codofeatvceu = convert(int,$codofeatvceu)
         AND o.codedicurceu = o.codedicurceu
