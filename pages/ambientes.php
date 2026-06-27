@@ -137,6 +137,7 @@ if ($registros) {
             'nome_curso_apolo'  => format_string($r->nome_curso_apolo),
             'codcurceu'         => $r->codcurceu,
             'codedicurceu'      => $r->codedicurceu,
+            'numseqofeedi'      => $r->numseqofeedi,
             'sglund'            => $r->sglund,
             'nomatvceu'         => $r->nomatvceu,
             'id_moodle'         => $r->id_moodle,

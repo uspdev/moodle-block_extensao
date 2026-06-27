@@ -25,6 +25,7 @@
         <FIELD NAME="dtainiofeatv"       TYPE="int"  LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Data de inicio do oferecimento da atividade."/>
         <FIELD NAME="dtafimofeatv"       TYPE="int"  LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Data de termino do oferecimento da atividade."/>
         <FIELD NAME="codcurceu"          TYPE="int"  LENGTH="16" NOTNULL="false" SEQUENCE="false" COMMENT="Código do curso no Apolo."/>
+        <FIELD NAME="numseqofeedi"       TYPE="int"  LENGTH="16" NOTNULL="false" SEQUENCE="false" COMMENT="Número sequêncial do do curso no Apolo."/>
         <FIELD NAME="codedicurceu"       TYPE="int"  LENGTH="16" NOTNULL="false" SEQUENCE="false" COMMENT="Código da edição do curso no Apolo."/>
         <FIELD NAME="sglund"             TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Sigla da unidade."/>
         <FIELD NAME="nomatvceu"          TYPE="text"             NOTNULL="false" SEQUENCE="false" COMMENT="Nome atividade no Apolo."/>

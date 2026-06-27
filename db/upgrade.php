@@ -35,6 +35,11 @@ function xmldb_block_extensao_upgrade($versaoAnterior) {
             $dbman->add_field($table, $field);
         }
 
+        $field = new xmldb_field('numseqofeedi', XMLDB_TYPE_INTEGER, '16', null, null, null, null, null);
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
         $field = new xmldb_field('sglund', XMLDB_TYPE_CHAR, '255', null, null, null, null, null);
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);

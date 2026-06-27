@@ -159,6 +159,7 @@ class Populate {
       $obj->codund = $turma['codund'];
       $obj->codcurceu = $turma['codcurceu'];
       $obj->codedicurceu = $turma['codedicurceu'];
+      $obj->numseqofeedi = $turma['numseqofeedi'];
       $obj->sglund = $turma['sglund'];
       $obj->nomatvceu = $turma['nomatvceu'];
       $obj->codcam = $turma['codcam'];
@@ -285,7 +286,7 @@ class Populate {
 
         $usuario = $usuariosIndex[$responsavel['codpes']];
 
-        $ministrantes[] = [
+        $ministrantes[$chave] = [
             'codofeatvceu' => $responsavel['codofeatvceu'],
             'codpes'       => $usuario['codpes'],
             'codatc'       => 1,
@@ -412,6 +413,7 @@ class Populate {
       $obj->nompes = $ministrante['nompes'];
       $obj->dscatc = $ministrante['dscatc'];
       $obj->codema = $ministrante['codema'];
+      $obj->responsavel = $ministrante['responsavel'];
       return $obj;
     }, $ministrantes);
   }

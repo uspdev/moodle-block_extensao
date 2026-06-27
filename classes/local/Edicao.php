@@ -149,7 +149,8 @@ class Edicao {
                     // Tenta buscar informacoes adicionais do usuario usando a funcao info_usuario
                     $ministrante = $Query->informacoesUsuario([$turma['codpes']]);
                     try {                    
-                        if ($ministrante) {
+                        if (isset($ministrante[0])) {
+                            $ministrante = $ministrante[0];
                             // Adicionar o novo registro diretamente se encontrar informacoes do usuario
                             $DB->insert_record('block_extensao_ministrante', [
                                 'codpes'       => $turma['codpes'],
