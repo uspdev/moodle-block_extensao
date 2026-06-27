@@ -28,7 +28,7 @@ class Edicao {
             $Query = new Query();
             
             // Busca o responsavel pela edicao para o curso especifico
-            $cursos = $Query->responsavelEdicao($codofeatvceu);
+            $cursos = $Query->responsavelEdicao([$codofeatvceu]);
             
             // Verifique explicitamente se ha cursos retornados e se é um array
             if (!is_array($cursos) || empty($cursos)) {
@@ -147,7 +147,7 @@ class Edicao {
                     }
                 } else {
                     // Tenta buscar informacoes adicionais do usuario usando a funcao info_usuario
-                    $ministrante = $Query->informacoesUsuario($turma['codpes']);
+                    $ministrante = $Query->informacoesUsuario([$turma['codpes']]);
                     try {                    
                         if ($ministrante) {
                             // Adicionar o novo registro diretamente se encontrar informacoes do usuario

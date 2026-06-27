@@ -157,6 +157,10 @@ class Populate {
       $obj->codofeatvceu = $turma['codofeatvceu'];
       $obj->nome_curso_apolo = $turma['nomcurceu'];
       $obj->codund = $turma['codund'];
+      $obj->codcurceu = $turma['codcurceu'];
+      $obj->codedicurceu = $turma['codedicurceu'];
+      $obj->sglund = $turma['sglund'];
+      $obj->nomatvceu = $turma['nomatvceu'];
       $obj->codcam = $turma['codcam'];
       $obj->objcur = $turma['objcur'];
       $obj->dtainiofeatv = is_null($turma['dtainiofeatv']) ? $turma['dtainiofeatv'] : strtotime($turma['dtainiofeatv']);
@@ -237,6 +241,7 @@ class Populate {
    * @return bool
    */
   private function sincronizarMinistrantes (array $turmas, bool $atualizar_ministrantes) {
+    
     // Captura dos ministrantes no Apolo
     cli_writeln(PHP_EOL."[MINISTRANTES]".PHP_EOL."# Capturando ministrantes...");
     $ministrantes = (new Query())->ministrantesTurmas($turmas);
@@ -245,16 +250,62 @@ class Populate {
     $ministrantes = $this->removerMinistrantesDuplicados($ministrantes);
   
     ///////////////// THIAGO
-    // responsáveis - tanto os que estão como ministrantes, como os que não estão
+    // Os ministrantes ten chaves: codpes_codofeatvceu
+    $query = new Query();
+
+    /*$indice = [];
+    foreach ($ministrantes as $chave => $m) {
+        $indice[$m['codofeatvceu']][$m['codpes']] = $chave;
+    }
+    */
+
+    $responsaveis = $query->responsavelEdicao($turmas);
+    cli_writeln(PHP_EOL."[Responsáveis]".PHP_EOL."# Responsáveis carregados...");
+
+    $codpes_dos_responsaveis = [];
+    foreach ($responsaveis as $r) {
+        $codpes_dos_responsaveis[$r['codpes']] = true;
+    }
+
+    $usuarios = $query->informacoesUsuario(array_keys($codpes_dos_responsaveis));
+    $usuariosIndex = [];
+    foreach ($usuarios as $u) {
+        $usuariosIndex[$u['codpes']] = $u;
+    }
+    cli_writeln(PHP_EOL."[Responsáveis]".PHP_EOL."# Informações de Responsáveis carregados...");
+
+    foreach ($responsaveis as $responsavel) {
+
+        $chave = $responsavel['codpes'] . '_' . $responsavel['codofeatvceu'];
+
+        if (isset($ministrantes[$chave])) {
+            $ministrantes[$chave]['responsavel'] = 1;
+            continue;
+        }
+
+        $usuario = $usuariosIndex[$responsavel['codpes']];
+
+        $ministrantes[] = [
+            'codofeatvceu' => $responsavel['codofeatvceu'],
+            'codpes'       => $usuario['codpes'],
+            'codatc'       => 1,
+            'nompes'       => $usuario['nompes'],
+            'dscatc'       => 'Professor USP',
+            'codema'       => $usuario['codema'],
+            'responsavel'  => 1
+        ];
+    }
+
+    /*
     foreach ($turmas as $codofeatvceu) {
       $responsaveis = (new Query())->responsavelEdicao($codofeatvceu);
       foreach ($responsaveis as $responsavel) {
-        // Verifica se o responsável já está na lista de ministrantes
+        
         $existe = false;
         foreach ($ministrantes as $i => $ministrante) {
             if (
-                $ministrante['codpes'] === $responsavel['codpes'] &&
-                $ministrante['codofeatvceu'] === $codofeatvceu
+                $ministrante['codpes'] == $responsavel['codpes'] &&
+                $ministrante['codofeatvceu'] == $codofeatvceu
             ) {
                 $ministrantes[$i]['responsavel'] = 1;
                 $existe = true;
@@ -266,21 +317,23 @@ class Populate {
         #    die("O responsável {$responsavel['codpes']} da turma {$codofeatvceu} não está na lista de ministrantes. Verifique os dados no Apolo.");
         #}
 
-        // Se não estiver, adiciona o responsável à lista de ministrantes
-        /*
+        $responsavel_info = (new Query())->informacoesUsuario($responsavel['codpes']);
+        
         if (!$existe) {
           $ministrantes[] = [
             'codofeatvceu' => $codofeatvceu,
             'codpes' => $responsavel['codpes'],
-            'codatc' => $responsavel['codatc'], 1 na unha que significa Professor USP
-            'nompes' => $responsavel['nompes'],
-            'dscatc' => $responsavel['dscatc'], Professor USP - na unha
-            'codema' => $responsavel['codema']
+            'codatc' => 1,
+            'nompes' => $responsavel_info['nompes'],
+            'dscatc' => 'Professor USP',
+            'codema' => $responsavel_info['codema'],
+            'responsavel' => 1
           ];
         }
-        */
+        
       }
     }
+    */
     /////////////////// THIAGO
 
 

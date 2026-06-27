@@ -42,12 +42,18 @@ $where  = "1=1";
 
 if (!empty($search)) {
     // Agrupamos com parênteses para que o OR não quebre os filtros de data abaixo
-    $where .= " AND ( " . $DB->sql_like('nome_curso_apolo', ':search_nome', false);
-    $where .= " OR " . $DB->sql_like('codofeatvceu', ':search_cod', false) . " )";
+    $where .= " AND ("
+        . $DB->sql_like('nome_curso_apolo', ':search_nome', false)
+        . " OR " . $DB->sql_like('codofeatvceu', ':search_codofeatvceu', false)
+        . " OR " . $DB->sql_like('nomatvceu', ':search_nomatvceu', false)
+        . " OR " . $DB->sql_like('codcurceu', ':search_codcurceu', false)
+        . ")";
     
     // Injetamos o mesmo termo de busca nos dois placeholders
     $params['search_nome'] = "%{$search}%";
-    $params['search_cod']  = "%{$search}%";
+    $params['search_codofeatvceu']  = "%{$search}%";
+    $params['search_nomatvceu'] = "%{$search}%";
+    $params['search_codcurceu']  = "%{$search}%";
 }
 
 // Filtro por intervalo de datas
@@ -129,8 +135,10 @@ if ($registros) {
         $turmas_formatadas[] = [
             'codofeatvceu'      => $r->codofeatvceu,
             'nome_curso_apolo'  => format_string($r->nome_curso_apolo),
-            'codcam'            => $r->codcam, # TODO: Não usado por enquanto, tem que converter, pois é númerico
-            'codund'            => $r->codund, # TODO: Não usado por enquanto, tem que converter, pois é númerico
+            'codcurceu'         => $r->codcurceu,
+            'codedicurceu'      => $r->codedicurceu,
+            'sglund'            => $r->sglund,
+            'nomatvceu'         => $r->nomatvceu,
             'id_moodle'         => $r->id_moodle,
             'data_inicio'       => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
             'data_fim'          => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',

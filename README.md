@@ -25,5 +25,7 @@ O plugin possui as seguintes configurações:
 
     admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar"
 
-Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso.
+Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso - como todos responsáveis são adicionados como ministrantes, pode remover a lógica anterior
+
+Arrumr quem chama informacoesUsuario, pois agora reotrna array
 

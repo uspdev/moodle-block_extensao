@@ -64,10 +64,12 @@
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Nome do Curso (Apolo)</th>
+                    <th>Unidade</th>
+                    <th>Curso (Apolo)</th>
+                    <th>Turma (Apolo)</th>
                     <th>Responsáveis</th>
                     <th>Ministrantes</th>
-                    <th>Curso no Moodle</th>
+                    <th>Moodle</th>
                     <th>Início</th>
                     <th>Fim</th>
                 </tr>
@@ -75,8 +77,13 @@
             <tbody>
                 {{#turmas}}
                 <tr>
-                    <td><a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterAtividade?cod_oferecimentoatv={{codofeatvceu}}">{{codofeatvceu}}</a> - {{nome_curso_apolo}}</td>
+                    <td>{{sglund}}</td>
+                    <td><a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterCurso?cod_curso={{codcurceu}}&cod_edicao={{codedicurceu}}">{{codcurceu}}</a> - {{nome_curso_apolo}}</td>
+
+                    <td><a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterAtividade?cod_oferecimentoatv={{codofeatvceu}}">{{codofeatvceu}}</a> - {{nomatvceu}}</td>
+
                     <td>
+
                         {{#tem_responsaveis}}
                             <ul class="list-unstyled mb-0">
                                 {{#responsaveis}}
@@ -121,7 +128,7 @@
 
                 {{^tem_registros}}
                 <tr>
-                    <td colspan="6" class="text-center p-4">
+                    <td colspan="8" class="text-center p-4">
                         <p class="mb-0 text-muted">Nenhuma turma encontrada.</p>
                     </td>
                 </tr>

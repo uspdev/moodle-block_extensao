@@ -68,6 +68,8 @@ class Query
       SELECT 
         o.codofeatvceu,
         c.nomcurceu,
+        o.codcurceu,
+        o.codedicurceu,
         c.codund,
         u.codcam,
         c.objcur,
@@ -75,7 +77,8 @@ class Query
         a.codatvceu,
         o.numseqofeedi,
         o.dtainiofeatv,
-        o.dtafimofeatv
+        o.dtafimofeatv,
+        u.sglund
       FROM " . $this->OFERECIMENTOATIVIDADECEU . " o
       LEFT JOIN " . $this->CURSOCEU . " c
         ON c.codcurceu = o.codcurceu 
@@ -190,7 +193,9 @@ class Query
    * 
    * @return object
    */
-  public function informacoesUsuario($codpes) {
+  public function informacoesUsuario($array_de_codpes) {
+    $string_de_codpes = implode(', ', $array_de_codpes);
+
     $query = 
     "SELECT
         p.codpes,
@@ -204,9 +209,9 @@ class Query
           (SELECT codpes, codema FROM " . $this->EMAILPESSOA . ") AS email_disponivel
           ON p.codpes = email_disponivel.codpes
       WHERE 
-        p.codpes = $codpes";
+        p.codpes IN ($string_de_codpes)";
      // Retornar a consulta
-    return USPDatabase::fetch($query);
+    return USPDatabase::fetchAll($query);
 }
 
 
@@ -244,18 +249,18 @@ class Query
    * @param int $codpes 
    * @return array
    */
-  public function responsavelEdicao ($codofeatvceu) {
-    
-    $periodo = get_config('block_extensao', 'periodo_curso');
+  public function responsavelEdicao ($codofeatvceu_turmas) {
+
+      $periodo = get_config('block_extensao', 'periodo_curso');
     $diaAtual = date("Y-m-d");
 
-    // opcoes para a pesquisa do inicio da busca por curso, coloquei as opcoes de 3, 6, 9 meses 
-    // e 1 ano, no entanto, esse valor pode ser alterado caso seja pertinente.
     if (in_array($periodo, ["3", "6", "9"]))
       $periodo_str = "-$periodo months";
     else
       $periodo_str = "-1 year";
     $inicio_curso = date("Y-m-d", strtotime($periodo_str, strtotime($diaAtual)));
+
+    $turmas = implode(', ', $codofeatvceu_turmas);
     
     $query = " 
       SELECT 
@@ -266,8 +271,9 @@ class Query
         ON r.codcurceu = o.codcurceu
         AND r.codedicurceu = o.codedicurceu
         AND r.codund = o.codund
-      WHERE o.codofeatvceu = $codofeatvceu
+      WHERE o.codofeatvceu IN ($turmas)
         AND o.dtainiofeatv >= '$inicio_curso'
+        AND r.codpes IS NOT NULL
       ORDER BY o.codofeatvceu
     ";
     return USPDatabase::fetchAll($query);
