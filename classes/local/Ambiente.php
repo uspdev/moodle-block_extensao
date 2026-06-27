@@ -96,13 +96,13 @@ class Ambiente {
         $info_ministrante = Turmas::ministrante_turma($id_ministrante, $info_forms->codofeatvceu);
         if (!isset($info_ministrante->nompes)) {
           // caso o nome nao esteja definido nas informacoes do usuario
-          \core\notification::error('Erro ao matricular o professor, por favor contate o suporte. ');
+          \core\notification::error('Erro ao matricular o professor, sem nome cadastrado no apolo. ');
           continue;
         }
         // tratamento para professor sem e-mail no sistema 
         if (!isset($info_ministrante->codema)) {
-          // caso o nome nao esteja definido nas informacoes do usuario
-          \core\notification::error('Não foi possivel matricular o professor ' . $info_ministrante->nompes . ' como ministrante, por favor contate o suporte.');
+          // caso o email nao esteja definido nas informacoes do usuario
+          \core\notification::error('Não foi possivel matricular o professor ' . $info_ministrante->nompes . ' como ministrante, pois não há e-mail cadastrado no apolo.');
           continue;
         }
 
@@ -112,7 +112,7 @@ class Ambiente {
         $ministrante = Usuario::cadastra_usuario($info_ministrante);
         if (!$ministrante) {
           // Caso ocorra um problema ao cadastrar a conta do professor
-          \core\notification::error('Não foi possível matricular o professor ' . $nome . ' como ministante adicional. Por favor contate o suporte.');
+          \core\notification::error('Não foi possível matricular o professor ' . $nome . ' como ministrante adicional. Por favor contate o suporte.');
         }
 
         // Captura o codpes do professor

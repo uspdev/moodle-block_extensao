@@ -27,15 +27,20 @@ class redirecionamento_criacao_ambiente_select extends \moodleform {
       $turma = $DB->get_record('block_extensao_turma', ['codofeatvceu'=>$indice]);
   
       // Convertendo o formato da data
-      $Inicio = !is_null($turma->dtainiofeatv) ? "(".date('d-m-Y', $turma->dtainiofeatv).")" : '';
-  
+      $Inicio = !is_null($turma->dtainiofeatv) ? date('d/m/Y', $turma->dtainiofeatv) : '';
+      $Fim = !is_null($turma->dtafimofeatv) ? date('d/m/Y', $turma->dtafimofeatv) : '';
+
+      // Se o nome do curso coincidir com o nome da atividade, não precisa repetir
+      $curso = "($turma->codofeatvceu) {$turma->nome_curso_apolo}";
+      if($turma->nome_curso_apolo != $turma->nomatvceu) $curso .= " - {$turma->nomatvceu}";
+      
       // Formatado com a data de inicio entre parenteses;
-      $option_label = "$nome_curso $Inicio";
+      $option_label = "$curso ($Inicio-$Fim)";
       $options[$indice] = $option_label;
     }
   
     $options = array('placeholder' => "Buscar") + $options;
-    $this->_form->addElement('autocomplete', 'select_ambiente', 'Buscar por turma', $options);
+    $this->_form->addElement('autocomplete', 'select_ambiente', '', $options);
 
     // botao de ajuda com os cursos disponiveis para o ministrante 
     $this->_form->addHelpButton('select_ambiente',  'cursos_disponiveis', 'block_extensao');

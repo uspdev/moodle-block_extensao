@@ -67,9 +67,8 @@ class block_extensao extends block_base {
             foreach ($cursos as $codofeatvceu => $nome_curso) {
                 // cria um formulario
                 $formurl = new moodle_url('/blocks/extensao/pages/criar_ambiente.php');
-                $form = new \block_extensao\form\redirecionamento_criacao_ambiente_lista($formurl, array('codofeatvceu' => $codofeatvceu));    
+                $form = new \block_extensao\form\redirecionamento_criacao_ambiente_lista($formurl, array('codofeatvceu' => $codofeatvceu)); 
                 $cursos_docente[] = array(
-                    'nome_curso_apolo' => $nome_curso,
                     'formulario_curso' => $form->render()
                 );
             }
@@ -82,7 +81,7 @@ class block_extensao extends block_base {
             $infos['formulario'] = $formulario->render();
         }
 
-        // Estratégia para capturamos se usuário é admin e usarmos no mustache
+        // Estratégia para capturamos se usuário é admin e usarmos no mustache para mostrar mais opções
         $context = context_system::instance();
         $infos['is_admin'] = has_capability('moodle/site:config', $context);
 

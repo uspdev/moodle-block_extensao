@@ -21,18 +21,24 @@ class redirecionamento_criacao_ambiente_lista extends \moodleform {
     $codofeatvceu = "";
     if (isset($this->_customdata['codofeatvceu'])) {
       $codofeatvceu = $this->_customdata['codofeatvceu'];
+      
 
       // Obter informacoes do curso
       $curso = Turmas::info_turma_id_extensao($codofeatvceu);
-      $nomeCurso = $curso->nome_curso_apolo;
+
+      // Se o nome do curso coincidir com o nome da atividade, não precisa repetir
+      $nome_curso = "($curso->codofeatvceu) {$curso->nome_curso_apolo}";
+      if($curso->nome_curso_apolo != $curso->nomatvceu) $nome_curso .= " - {$curso->nomatvceu}";
+
       $dataInicio = $curso->dtainiofeatv;
+      $dataFim = $curso->dtafimofeatv;
 
       // Formatando a data de inicio
       $dataInicioFormatada = is_null($dataInicio) ? '-' : date('d/m/Y', $dataInicio);
-      $inicioFormatado = "<span style='color: red; font-weight: bold'>".$dataInicioFormatada."</span>";
+      $dataFimFormatada = is_null($dataFim) ? '-' : date('d/m/Y', $dataFim);
 
-      // Construindo o rotulo do curso com a data de inicio estilizada
-      $labelCurso = "Inicia em: $inicioFormatado";
+      $labelCurso = "$nome_curso<br>";
+      $labelCurso .= "<span style='color: red;'>(".$dataInicioFormatada."-".$dataFimFormatada.")</span>";      
 
       // Adicionando o elemento de texto com o nome do curso e a data de inicio estilizada
       $this->_form->addElement('static', 'curso_com_data_inicio', $labelCurso);

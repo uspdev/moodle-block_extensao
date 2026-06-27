@@ -3,9 +3,6 @@
 namespace block_extensao\local;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/Edicao.php');
-
-
 class Turmas {
   
   /**
@@ -47,26 +44,7 @@ class Turmas {
     // Captura as turmas relacionadas ao usuario
     $query1 = "SELECT id, codofeatvceu FROM {block_extensao_ministrante} WHERE codpes = :nusp_docente AND codatc IN (1,2,5)";
     $usuario_turmas = $DB->get_records_sql($query1, ['nusp_docente' => $nusp_docente]);
-
-
-    // Captura as turmas onde o usuario a responsavel pela edição
-    $cursosEdicao = Edicao::responsavelEdicao($nusp_docente);
-
-    if ($cursosEdicao)
-    {
-      // para combinar as 2 consultas
-      $turmas_ids = array_column($cursosEdicao, 'codofeatvceu');
-      
-      $query2 = "SELECT id, codofeatvceu FROM {block_extensao_ministrante} WHERE codofeatvceu IN (" . implode(',', array_map('intval', $turmas_ids)) . ")";
-      $responsavel_turmas = $DB->get_records_sql($query2);
-      
-      // resultados
-      $cursos_usuario = array_merge($usuario_turmas, $responsavel_turmas);
-    }
-    else
-      $cursos_usuario = $usuario_turmas;
-    $cursos_usuario = Turmas::info_turmas($cursos_usuario);
-    return $cursos_usuario;
+    return Turmas::info_turmas($usuario_turmas);
   }
 
   /**

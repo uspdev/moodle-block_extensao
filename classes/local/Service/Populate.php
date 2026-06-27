@@ -7,9 +7,6 @@ require_once('Query.php');
 use block_extensao\local\Service\Query;
 use core\notification;
 
-require_once(__DIR__ . '/../Edicao.php');
-
-
 class Populate {
 
   /**
@@ -352,12 +349,6 @@ class Populate {
     try {
         $this->salvarMinistrantes($ministrantes);
         cli_writeln("* Ministrantes sincronizados!");
-
-        // // Atribui permissoes de responsavel pela edicao ministrante responsaveis pela edicao
-        // cli_writeln("# Atribuindo permissões de edição...");
-        // foreach ($turmas as $turma_codofeatvceu) {
-        //     Edicao::atribuiEdicao($turma_codofeatvceu);
-        // }
         return TRUE;
 
     } catch (Exception $e) {

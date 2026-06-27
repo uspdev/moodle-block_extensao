@@ -12,27 +12,6 @@ require_once(__DIR__ . '/Atuacao.php');
 use core\message\message;
 
 class Usuario {
-
-  /**
-   * Para inscrever um usuario em um curso com um determinado papel.
-   * 
-   * @param object $curso Objeto de curso criado por $this->criar_objeto_curso.
-   * 
-   * @return bool|object Erro ou curso criado.
-   */
-  public static function inscreve_usuario ($id_curso, $id_usuario, $id_papel) {
-    // instancia do curso
-    $instancia = array_values(enrol_get_instances($id_curso, true))[0];
-    // plugin de 'enrol'
-    $plugin = enrol_get_plugin('manual');
-    // faz o 'enrol' entre o usuario e a instancia com o devido papel
-    $plugin->enrol_user($instancia, $id_usuario, $id_papel);
-    // captura o contexto do sistema
-    $contexto = \context_system::instance();
-    // define o usuario com o devido papel no devido contexto
-    role_assign($id_papel, $id_usuario, $contexto->id);
-  }
-
   /**
    * Para inscrever o usuario logado como "editingteacher".
    * 
@@ -73,7 +52,37 @@ class Usuario {
     // captura o papel do shortname
     $role = $DB->get_record('role', ['shortname' => $shortname_codatc]);
 
-    self::inscreve_usuario($id_curso, $id_professor, $role->id);
+    // instancia do curso
+    $instances = enrol_get_instances($id_curso, true);
+    $instancia = null;
+    foreach ($instances as $instance) {
+        if ($instance->enrol === 'manual') {
+            $instancia = $instance;
+            break;
+        }
+    }
+    if (!$instancia) {
+      throw new \moodle_exception('Instância de matrícula manual não encontrada.');
+    }
+
+    // plugin de 'enrol'
+    $plugin = enrol_get_plugin('manual');
+
+    // faz o 'enrol' entre o usuario e a instancia com o devido papel
+    $plugin->enrol_user($instancia, $id_professor, $role->id);
+
+    // captura o contexto do curso
+    $context = \context_course::instance($id_curso);
+
+    // Remove todas as atribuições de papel do usuário neste contexto.
+    role_unassign_all([
+        'contextid' => $context->id,
+        'userid'    => $id_professor,
+    ]);
+
+    // Atribui apenas o papel desejado.
+    role_assign($role->id, $id_professor, $context->id);
+
   }
 
   /**

@@ -23,9 +23,13 @@ class Atuacao {
   const CARGOS_EDITINGTEACHER = array(1,2,5,7);
 
   static public function correspondencia_moodle ($codatc) {
+    // TODO: THiago; Temos que conversar para definir papéis, por enquanto vou deixar todo mundo como docente
+    return 'editingteacher';
+    /*
     if (array_search($codatc, self::CARGOS_EDITINGTEACHER))
       return 'editingteacher';
     else
       return 'teacher';
+    */
   }
 }

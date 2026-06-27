@@ -107,8 +107,7 @@ else if (!empty($info_forms_lista)) {
 else 
   redirect($CFG->wwwroot);
   // Verifica se a turma enviada eh do usuario logado
-  if (!Turmas::usuario_docente_turma($USER->username, $codofeatvceu) && !Categorias::usuario_gerente_turma($USER->id, $codofeatvceu)
-  && !Edicao::usuario_responsavel_edicao($USER->username, $codofeatvceu)) {
+  if (!Turmas::usuario_docente_turma($USER->username, $codofeatvceu) && !Categorias::usuario_gerente_turma($USER->id, $codofeatvceu)) {
     \core\notification::error('A turma solicitada não está na sua lista de turmas!');
     redirect($_SERVER['HTTP_REFERER']);
   }
@@ -124,6 +123,11 @@ else
 // Foi adicionado o inicio e fim do curso 
 $informacoes_turma = Turmas::info_turma_id_extensao($codofeatvceu);
 
+// Se o nome do curso coincidir com o nome da atividade, não precisa repetir
+$nome_curso_moodle = $informacoes_turma->nome_curso_apolo;
+if($informacoes_turma->nome_curso_apolo != $informacoes_turma->nomatvceu) 
+  $nome_curso_moodle .= " - {$informacoes_turma->nomatvceu}";
+
 // Lista de ministrantes
 $ministrantes = Usuario::ministrantes_turma($codofeatvceu, $USER->username);
 
@@ -131,7 +135,7 @@ $ministrantes = Usuario::ministrantes_turma($codofeatvceu, $USER->username);
 $formulario = new \block_extensao\form\criar_ambiente_moodle('', array(
   'codofeatvceu' => $codofeatvceu,
   'shortname' => $codofeatvceu,
-  'fullname' => $informacoes_turma->nome_curso_apolo,
+  'fullname' => $nome_curso_moodle,
   'summary' => $informacoes_turma->objcur ?? '',
   'startdate' => $informacoes_turma->dtainiofeatv,
   'enddate' => $informacoes_turma->dtafimofeatv,
