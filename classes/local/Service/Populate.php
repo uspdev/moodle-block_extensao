@@ -240,8 +240,49 @@ class Populate {
     // Captura dos ministrantes no Apolo
     cli_writeln(PHP_EOL."[MINISTRANTES]".PHP_EOL."# Capturando ministrantes...");
     $ministrantes = (new Query())->ministrantesTurmas($turmas);
+
     // Indexa o array de ministrantes, para evitar as duplicatadas do e-mail
     $ministrantes = $this->removerMinistrantesDuplicados($ministrantes);
+  
+    ///////////////// THIAGO
+    // responsáveis - tanto os que estão como ministrantes, como os que não estão
+    foreach ($turmas as $codofeatvceu) {
+      $responsaveis = (new Query())->responsavelEdicao($codofeatvceu);
+      foreach ($responsaveis as $responsavel) {
+        // Verifica se o responsável já está na lista de ministrantes
+        $existe = false;
+        foreach ($ministrantes as $i => $ministrante) {
+            if (
+                $ministrante['codpes'] === $responsavel['codpes'] &&
+                $ministrante['codofeatvceu'] === $codofeatvceu
+            ) {
+                $ministrantes[$i]['responsavel'] = 1;
+                $existe = true;
+                break;
+            }
+        }
+
+        #if (!$existe) {
+        #    die("O responsável {$responsavel['codpes']} da turma {$codofeatvceu} não está na lista de ministrantes. Verifique os dados no Apolo.");
+        #}
+
+        // Se não estiver, adiciona o responsável à lista de ministrantes
+        /*
+        if (!$existe) {
+          $ministrantes[] = [
+            'codofeatvceu' => $codofeatvceu,
+            'codpes' => $responsavel['codpes'],
+            'codatc' => $responsavel['codatc'], 1 na unha que significa Professor USP
+            'nompes' => $responsavel['nompes'],
+            'dscatc' => $responsavel['dscatc'], Professor USP - na unha
+            'codema' => $responsavel['codema']
+          ];
+        }
+        */
+      }
+    }
+    /////////////////// THIAGO
+
 
     if (!$ministrantes) {
       cli_writeln("* [PROVAVEL ERRO] Nenhum ministrante encontrado!");
