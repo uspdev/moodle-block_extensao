@@ -43,3 +43,6 @@ Se você está criando usuários via API (Web Services) ou quer apenas que eles 
 
 
     ministrantes duplicados
+
+
+    uspdb-sync cepaview

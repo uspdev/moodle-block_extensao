@@ -244,18 +244,11 @@ class Populate {
     cli_writeln(PHP_EOL."[MINISTRANTES]".PHP_EOL."# Capturando ministrantes...");
     $ministrantes = (new Query())->ministrantesTurmas($turmas);
 
-    // Indexa o array de ministrantes, para evitar as duplicatadas do e-mail
+    // Indexa o array de ministrantes, para evitar as duplicatas do e-mail
     $ministrantes = $this->removerMinistrantesDuplicados($ministrantes);
   
-    ///////////////// THIAGO
-    // Os ministrantes ten chaves: codpes_codofeatvceu
+    // O array $ministrantes tem chaves: codpes_codofeatvceu
     $query = new Query();
-
-    /*$indice = [];
-    foreach ($ministrantes as $chave => $m) {
-        $indice[$m['codofeatvceu']][$m['codpes']] = $chave;
-    }
-    */
 
     $responsaveis = $query->responsavelEdicao($turmas);
     cli_writeln(PHP_EOL."[Responsáveis]".PHP_EOL."# Responsáveis carregados...");
@@ -293,47 +286,6 @@ class Populate {
             'responsavel'  => 1
         ];
     }
-
-    /*
-    foreach ($turmas as $codofeatvceu) {
-      $responsaveis = (new Query())->responsavelEdicao($codofeatvceu);
-      foreach ($responsaveis as $responsavel) {
-        
-        $existe = false;
-        foreach ($ministrantes as $i => $ministrante) {
-            if (
-                $ministrante['codpes'] == $responsavel['codpes'] &&
-                $ministrante['codofeatvceu'] == $codofeatvceu
-            ) {
-                $ministrantes[$i]['responsavel'] = 1;
-                $existe = true;
-                break;
-            }
-        }
-
-        #if (!$existe) {
-        #    die("O responsável {$responsavel['codpes']} da turma {$codofeatvceu} não está na lista de ministrantes. Verifique os dados no Apolo.");
-        #}
-
-        $responsavel_info = (new Query())->informacoesUsuario($responsavel['codpes']);
-        
-        if (!$existe) {
-          $ministrantes[] = [
-            'codofeatvceu' => $codofeatvceu,
-            'codpes' => $responsavel['codpes'],
-            'codatc' => 1,
-            'nompes' => $responsavel_info['nompes'],
-            'dscatc' => 'Professor USP',
-            'codema' => $responsavel_info['codema'],
-            'responsavel' => 1
-          ];
-        }
-        
-      }
-    }
-    */
-    /////////////////// THIAGO
-
 
     if (!$ministrantes) {
       cli_writeln("* [PROVAVEL ERRO] Nenhum ministrante encontrado!");
@@ -417,7 +369,46 @@ class Populate {
    */
   private function salvarMinistrantes (array $ministrantes) {
     global $DB;
-    $DB->insert_records('block_extensao_ministrante', $ministrantes);
+    if (!empty($ministrantes)) {
+        // 1. Coleta as listas de codofeatvceu e codpes
+        $codigos_ofertas = array_unique(array_column($ministrantes, 'codofeatvceu'));
+        $codigos_pessoas = array_unique(array_column($ministrantes, 'codpes'));
+
+        // 2. Monta os "IN (?,?,?)" separados para cada campo com placeholders nomeados distintos
+        list($in_ofertas_sql, $in_ofertas_params) = $DB->get_in_or_equal($codigos_ofertas, SQL_PARAMS_NAMED, 'of');
+        list($in_pessoas_sql, $in_pessoas_params) = $DB->get_in_or_equal($codigos_pessoas, SQL_PARAMS_NAMED, 'pe');
+
+        // 3. Combina as cláusulas WHERE e junta os parâmetros em um único array
+        $where = "codofeatvceu $in_ofertas_sql AND codpes $in_pessoas_sql";
+        $params = array_merge($in_ofertas_params, $in_pessoas_params);
+
+        // 4. Busca apenas os registros que dão MATCH exato em ambos os campos
+        $ja_existentes = $DB->get_records_select('block_extensao_ministrante', $where, $params);
+
+        // 5. Mapeia o que de fato já existe no banco
+        $mapa_existente = [];
+        if ($ja_existentes) {
+            foreach ($ja_existentes as $ja) {
+                $chave = $ja->codpes . '_' . $ja->codofeatvceu;
+                $mapa_existente[$chave] = true;
+            }
+        }
+
+        // 6. Filtra para manter só quem é inédito
+        $ministrantes_para_inserir = [];
+        foreach ($ministrantes as $m) {
+            $chave_atual = $m->codpes . '_' . $m->codofeatvceu;
+            
+            if (!isset($mapa_existente[$chave_atual])) {
+                $ministrantes_para_inserir[] = $m;
+            }
+        }
+
+        // 7. Insere em lote os novos
+        if (!empty($ministrantes_para_inserir)) {
+            $DB->insert_records('block_extensao_ministrante', $ministrantes_para_inserir);
+        }
+    }
   }
 
   /**
