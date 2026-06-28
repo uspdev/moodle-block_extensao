@@ -2,6 +2,7 @@
 
 namespace block_extensao\local;
 defined('MOODLE_INTERNAL') || die();
+#define('CLI_SCRIPT', true);
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
@@ -18,12 +19,12 @@ class Matriculados {
         $matriculados = $query->informacoesUsuario($array_de_codpes);
 
         // não tem matriculados ainda
-        if(empty($matriculados)) return;
+        if(empty($matriculados)) return null;
 
         // indexando pelo codpes para facilitar a vida
         $matriculadosPorCodpes = [];
         foreach ($matriculados as $m) {
-            $matriculadosPorCodpes[$m['codpes']] = $m;
+            $matriculadosPorCodpes[trim($m['codpes'])] = $m;
         }
 
         // Estudantes com contas já criadas no moodle
@@ -63,8 +64,8 @@ class Matriculados {
 
             $update = new \stdClass();
             $update->id = $existente->id;
-            $update->username = $codpes;
-            $update->idnumber = $codpes;
+            $update->username = trim($codpes);
+            $update->idnumber = trim($codpes);
             $update->firstname = $firstname;
             $update->lastname = $lastname;
             $update->confirmed = 1;
@@ -81,7 +82,7 @@ class Matriculados {
             $userids[] = $existente->id;
 
             // Remove para saber quem ainda precisa ser criado.
-            unset($matriculadosPorCodpes[$codpes]);
+            unset($matriculadosPorCodpes[trim($codpes)]);
         }
 
         // Agora cadastra os que não tem cadastro
@@ -92,8 +93,8 @@ class Matriculados {
             $lastname = implode(' ', $partes);
 
             $novo = new \stdClass();
-            $novo->username = $codpes;
-            $novo->idnumber = $codpes;
+            $novo->username = trim($codpes);
+            $novo->idnumber = trim($codpes);
             $novo->firstname = $firstname;
             $novo->lastname = $lastname;
             $novo->email = $m['codema'];
@@ -105,10 +106,9 @@ class Matriculados {
                 $userids[] = $novo->id;
             } catch (\Throwable $e) {
                 // TODO: Thiago. verificar com o Leônicas com os usuários repetidos na base
-                //mtrace("Erro criando usuário {$codpes}: ".$e->getMessage());
+                #mtrace("Erro criando usuário {$codpes}: ".$e->getMessage());
             }
         }
-
 
         // Atribui papel de student
         $enrol = $DB->get_record('enrol', [
@@ -129,3 +129,5 @@ class Matriculados {
     }
 
 }
+
+#Matriculados::cria_matriculados(141422, 3);
