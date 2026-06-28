@@ -68,19 +68,19 @@ class Ambiente {
     \core\notification::success('Ambiente criado com sucesso!');
 
     //// Matricula os estudantes no curso
-    //Matriculados::cria_matriculados($info_forms->codofeatvceu, $moodle_curso->id);
+    Matriculados::cria_matriculados($info_forms->codofeatvceu, $moodle_curso->id);
     // 1. Prepara os dados para tarefa
-    $matriculados = new \stdClass();
-    $matriculados->codofeatvceu = $info_forms->codofeatvceu;
-    $matriculados->courseid     = $moodle_curso->id;
+    //$matriculados = new \stdClass();
+    //$matriculados->codofeatvceu = $info_forms->codofeatvceu;
+    //$matriculados->courseid     = $moodle_curso->id;
 
     // 2. Instancia a nova tarefa adhoc
-    $task_matriculados = new matriculados_task();
-    $task_matriculados->set_custom_data($matriculados);
+    //$task_matriculados = new matriculados_task();
+    //$task_matriculados->set_custom_data($matriculados);
 
     // 3. Joga a tarefa na fila do Moodle
-    \core\task\manager::queue_adhoc_task($task_matriculados);
-    \core\notification::success('Alunos em processo de sincronização, pode levar algumas horas.');
+    //\core\task\manager::queue_adhoc_task($task_matriculados);
+    //\core\notification::success('Alunos em processo de sincronização, pode levar algumas horas.');
 
     // Por fim eh preenchido o campo sincronizado_apolo com 1 em relacao ao curso que foi criado
     Populate::sincronizadoApolo($moodle_curso->id);

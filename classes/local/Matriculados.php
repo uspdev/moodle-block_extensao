@@ -1,8 +1,8 @@
 <?php
 
 namespace block_extensao\local;
-defined('MOODLE_INTERNAL') || die();
-#define('CLI_SCRIPT', true);
+#defined('MOODLE_INTERNAL') || die();
+define('CLI_SCRIPT', true); # Para testes
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
@@ -15,16 +15,27 @@ class Matriculados {
     public static function cria_matriculados($codofeatvceu, $courseid){
         global $DB;
         $query = new Query();
-        $array_de_codpes = $query->matriculados($codofeatvceu);
-        $matriculados = $query->informacoesUsuario($array_de_codpes);
 
+        // captura codpes dos matriculados no curso
+        $array_de_codpes = $query->matriculados($codofeatvceu);
+        $array_de_codpes = array_map('trim', $array_de_codpes);
+
+        // captura informações como nome e email dos matriculados no curso
+        $matriculados = $query->informacoesUsuario($array_de_codpes);
         // não tem matriculados ainda
         if(empty($matriculados)) return null;
+        // por algum motivo o campo codpes está vindo com espaços...
+        foreach ($matriculados as &$matriculado) {
+            if (isset($matriculado['codpes'])) {
+                $matriculado['codpes'] = trim($matriculado['codpes']);
+            }
+        }
+        unset($matriculado);
 
         // indexando pelo codpes para facilitar a vida
         $matriculadosPorCodpes = [];
         foreach ($matriculados as $m) {
-            $matriculadosPorCodpes[trim($m['codpes'])] = $m;
+            $matriculadosPorCodpes[$m['codpes']] = $m;
         }
 
         // Estudantes com contas já criadas no moodle
@@ -44,18 +55,14 @@ class Matriculados {
         $userids = [];
         foreach ($existentes as $existente) {
             $codpes = null;
-
             if (isset($matriculadosPorCodpes[$existente->username])) {
-                $codpes = $existente->username;
+                $codpes = trim($existente->username);
             } elseif (!empty($existente->idnumber) &&
                     isset($matriculadosPorCodpes[$existente->idnumber])) {
-                $codpes = $existente->idnumber;
+                $codpes = trim($existente->idnumber);
             }
-
-            if ($codpes === null) {
-                continue;
-            }
-
+            if ($codpes === null) continue;
+            
             $m = $matriculadosPorCodpes[$codpes];
 
             $partes = preg_split('/\s+/', trim($m['nompes']));
@@ -64,8 +71,8 @@ class Matriculados {
 
             $update = new \stdClass();
             $update->id = $existente->id;
-            $update->username = trim($codpes);
-            $update->idnumber = trim($codpes);
+            $update->username = $codpes;
+            $update->idnumber = $codpes;
             $update->firstname = $firstname;
             $update->lastname = $lastname;
             $update->confirmed = 1;
@@ -75,14 +82,14 @@ class Matriculados {
             try {
                 user_update_user($update, false);
             } catch (\Throwable $e) {
-                // TODO: Thiago. verificar com o Leônicas com os usuários repetidos na base
+                // TODO: Thiago. verificar com o Leônicas com os usuários repetidos na base, talvez um merge de usuários?
                 //mtrace("Erro atualizando usuário {$existente->id}: ".$e->getMessage());
             }
 
             $userids[] = $existente->id;
 
             // Remove para saber quem ainda precisa ser criado.
-            unset($matriculadosPorCodpes[trim($codpes)]);
+            unset($matriculadosPorCodpes[$codpes]);
         }
 
         // Agora cadastra os que não tem cadastro
@@ -130,4 +137,5 @@ class Matriculados {
 
 }
 
-#Matriculados::cria_matriculados(141422, 3);
+# Para testes
+Matriculados::cria_matriculados(142438,22);
