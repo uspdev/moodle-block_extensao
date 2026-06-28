@@ -34,3 +34,12 @@ docker exec -it moodleusp php moodle/admin/cli/cron.php
 fazer um task shceduled para atualizar os estudantes
 
 na matricula dos estuantes, fazer um merge?
+
+Desativar a notificação na criação/atualização (Recomendado)
+
+Se você está criando usuários via API (Web Services) ou quer apenas que eles não recebam e-mails de alteração de senha/boas-vindas, altere as seguintes configurações no painel do Moodle:
+
+    Acesse como Administrador: Administração do site > Plugins > Autenticação > Gerenciar autenticação.
+
+
+    ministrantes duplicados

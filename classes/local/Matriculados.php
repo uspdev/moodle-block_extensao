@@ -1,8 +1,8 @@
 <?php
 
 namespace block_extensao\local;
-#defined('MOODLE_INTERNAL') || die();
-define('CLI_SCRIPT', true); # Para testes
+defined('MOODLE_INTERNAL') || die();
+#define('CLI_SCRIPT', true); # Para testes
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/user/lib.php');
@@ -118,12 +118,24 @@ class Matriculados {
         }
 
         // Atribui papel de student
+        $plugin = enrol_get_plugin('manual');
+
         $enrol = $DB->get_record('enrol', [
             'courseid' => $courseid,
             'enrol' => 'manual'
-        ], '*', MUST_EXIST);
+        ]);
 
-        $plugin = enrol_get_plugin('manual');
+        if (!$enrol) {
+            $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
+            $instancefields = [
+                'courseid' => $course->id,
+                'status'   => ENROL_INSTANCE_ENABLED
+            ];
+            $instanceid = $plugin->add_instance($course, $instancefields);
+
+            $enrol = $DB->get_record('enrol', ['id' => $instanceid], '*', MUST_EXIST);
+        }
+
         $studentrole = $DB->get_field('role', 'id', ['shortname' => 'student']);
         foreach ($userids as $userid) {
             $plugin->enrol_user(
@@ -138,4 +150,4 @@ class Matriculados {
 }
 
 # Para testes
-Matriculados::cria_matriculados(142438,22);
+#Matriculados::cria_matriculados(142438,22);
