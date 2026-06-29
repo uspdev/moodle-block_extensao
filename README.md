@@ -25,24 +25,18 @@ O plugin possui as seguintes configurações:
 
     admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar"
 
-Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso - como todos responsáveis são adicionados como ministrantes, pode remover a lógica anterior
+Nova tela de administração de cursos do apolo (falta fazer u show dos cursos para mostrar matriculados para conferencia)
 
+Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso - como todos responsáveis são adicionados como ministrantes, pode remover a lógica anterior
 
 docker exec -it moodleusp php moodle/admin/cli/cron.php
 
+fazer um task shceduled para atualizar os estudantes somnete dos cursos ainda não finalizados
 
-fazer um task shceduled para atualizar os estudantes
-
-na matricula dos estuantes, fazer um merge?
+na matricula dos estuantes, fazer um merge dos duplicados?
 
 Desativar a notificação na criação/atualização (Recomendado)
 
-Se você está criando usuários via API (Web Services) ou quer apenas que eles não recebam e-mails de alteração de senha/boas-vindas, altere as seguintes configurações no painel do Moodle:
+Administração do site > Plugins > Autenticação > Gerenciar autenticação.
 
-    Acesse como Administrador: Administração do site > Plugins > Autenticação > Gerenciar autenticação.
-
-
-    ministrantes duplicados
-
-
-    uspdb-sync cepaview
+tricar cepaview para uspdb-sync 
