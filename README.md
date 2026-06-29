@@ -40,3 +40,7 @@ Desativar a notificação na criação/atualização (Recomendado)
 Administração do site > Plugins > Autenticação > Gerenciar autenticação.
 
 tricar cepaview para uspdb-sync 
+
+Gerente de categoria criar curso é útil?
+
+Falta fazer o form de solicitição de novos ambientes
