@@ -25,22 +25,18 @@ O plugin possui as seguintes configurações:
 
     admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar"
 
-Nova tela de administração de cursos do apolo (falta fazer u show dos cursos para mostrar matriculados para conferencia)
+## Itens para conversar reunião 2026062602:
 
-Os responsáveis do curso podem criar qualquer turma (displcina/atividade/ofereciemnto) do curso - como todos responsáveis são adicionados como ministrantes, pode remover a lógica anterior
+- Nova tela de administração de cursos do apolo (falta fazer um show dos cursos para mostrar matriculados para conferência)
+- Os responsáveis do curso no Apolo agora podem criar qualquer disciplina do curso (resolve problema apontados por Ettore/Adriana)
+- Alunos são inseridos via cron (não foi feito novo plugin)
+- Conpuesp
 
-docker exec -it moodleusp php moodle/admin/cli/cron.php
+Pendências Thiago:
 
-fazer um task shceduled para atualizar os estudantes somnete dos cursos ainda não finalizados
-
-na matricula dos estuantes, fazer um merge dos duplicados?
-
-Desativar a notificação na criação/atualização (Recomendado)
-
-Administração do site > Plugins > Autenticação > Gerenciar autenticação.
-
-tricar cepaview para uspdb-sync 
-
-Gerente de categoria criar curso é útil?
-
-Falta fazer o form de solicitição de novos ambientes
+- Nova tela de administração falta fazer um show dos cursos para mostrar matriculados no Apolo para conferência
+- Fazer um task scheduled para atualizar os estudantes com apolo somente dos cursos ainda não finalizados
+- Na inscrição da matricula dos estuantes, fazer um merge entre usuários dos duplicados (Leônidas)?
+- Trocar cepaview para uspdb-sync 
+- Gerente de categoria criar curso é útil?
+- Falta fazer o form de solicitição de novos ambientes não apolo (com aprovação peja CCeX)
