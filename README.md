@@ -29,7 +29,7 @@ O plugin possui as seguintes configurações:
 
 - Nova tela de administração de cursos do apolo (falta fazer um show dos cursos para mostrar matriculados para conferência)
 - Os responsáveis do curso no Apolo agora podem criar qualquer disciplina do curso (resolve problema apontados por Ettore/Adriana)
-- Alunos são inseridos via cron (não foi feito novo plugin)
+- Alunos são inseridos via cron (não foi feito novo plugin) - Nova configuração do plugin das tabelas de matriculados no apolo
 - Conpuesp
 
 Pendências Thiago:
