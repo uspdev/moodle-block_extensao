@@ -109,9 +109,9 @@ if ($registros) {
 
             // Verifica se é responsável (considerando que 1 = Sim)
             if ((int)$m->responsavel === 1) {
-                $ministrantes_por_turma[$cod]['responsaveis'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes);
+                $ministrantes_por_turma[$cod]['responsaveis'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes) . ' (' . $m->codema . ')';
             } else {
-                $ministrantes_por_turma[$cod]['ministrantes'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes);
+                $ministrantes_por_turma[$cod]['ministrantes'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes) . ' (' . $m->codema . ')';
             }
         }
     }
@@ -133,20 +133,21 @@ if ($registros) {
 
         // CORREÇÃO AQUI: Agora passamos as variáveis para o array mapeado do Mustache
         $turmas_formatadas[] = [
-            'codofeatvceu'      => $r->codofeatvceu,
-            'nome_curso_apolo'  => format_string($r->nome_curso_apolo),
-            'codcurceu'         => $r->codcurceu,
-            'codedicurceu'      => $r->codedicurceu,
-            'numseqofeedi'      => $r->numseqofeedi,
-            'sglund'            => $r->sglund,
-            'nomatvceu'         => $r->nomatvceu,
-            'id_moodle'         => $r->id_moodle,
-            'data_inicio'       => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
-            'data_fim'          => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',
-            'responsaveis'      => $responsaveis_formatados, // <-- Adicionado
-            'ministrantes'      => $ministrantes_formatados, // <-- Adicionado
-            'tem_responsaveis'  => !empty($responsaveis_formatados),
-            'tem_ministrantes'  => !empty($ministrantes_formatados),
+            'codofeatvceu'       => $r->codofeatvceu,
+            'nome_curso_apolo'   => format_string($r->nome_curso_apolo),
+            'codcurceu'          => $r->codcurceu,
+            'codedicurceu'       => $r->codedicurceu,
+            'numseqofeedi'       => $r->numseqofeedi,
+            'sglund'             => $r->sglund,
+            'nomatvceu'          => $r->nomatvceu,
+            'total_matriculados' => $r->total_matriculados,
+            'id_moodle'          => $r->id_moodle,
+            'data_inicio'        => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
+            'data_fim'           => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',
+            'responsaveis'       => $responsaveis_formatados, // <-- Adicionado
+            'ministrantes'       => $ministrantes_formatados, // <-- Adicionado
+            'tem_responsaveis'   => !empty($responsaveis_formatados),
+            'tem_ministrantes'   => !empty($ministrantes_formatados),
         ];
     }
 }

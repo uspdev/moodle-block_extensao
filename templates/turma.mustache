@@ -1,0 +1,164 @@
+<div class="block-extensao-turma my-3">
+
+    {{#encontrado}}
+    {{#turma}}
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-white">
+                <i class="fa fa-info-circle me-1"></i> Detalhes do Oferecimento: {{codofeatvceu}}
+            </h5>
+            <a href="{{wwwroot}}/blocks/extensao/pages/ambientes.php" class="btn btn-sm btn-light">
+                <i class="fa fa-arrow-left"></i> Voltar para a lista
+            </a>
+        </div>
+
+        <div class="card-body">
+            
+            <!-- Linha 1: Unidade e Nome do Curso -->
+            <div class="row mb-3 pb-3 border-bottom">
+                <div class="col-md-3">
+                    <strong class="d-block text-muted small text-uppercase">Sigla da Unidade</strong>
+                    <span class="fs-6">{{sglund}}</span>
+                </div>
+                <div class="col-md-9">
+                    <strong class="d-block text-muted small text-uppercase">Curso (Apolo)</strong>
+                    <span class="fs-6">
+                        <a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterCurso?cod_curso={{codcurceu}}&cod_edicao={{codedicurceu}}&numseqofeedi={{numseqofeedi}}">
+                            {{codcurceu}}
+                        </a> - {{nome_curso_apolo}}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Linha 2: Atividade, Matriculados e Status Moodle -->
+            <div class="row mb-3 pb-3 border-bottom">
+                <div class="col-md-6">
+                    <strong class="d-block text-muted small text-uppercase">Turma / Atividade (Apolo)</strong>
+                    <span class="fs-6">
+                        <a target="_blank" href="https://uspdigital.usp.br/apolo/apoObterAtividade?cod_oferecimentoatv={{codofeatvceu}}">
+                            {{codofeatvceu}}
+                        </a> - {{nomatvceu}}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <strong class="d-block text-muted small text-uppercase">Matriculados (Apolo)</strong>
+                    <span class="badge bg-secondary fs-6">{{total_matriculados}}</span>
+                </div>
+                <div class="col-md-3">
+                    <strong class="d-block text-muted small text-uppercase">Ambiente Moodle</strong>
+                    {{#id_moodle}}
+                        <a href="{{wwwroot}}/course/view.php?id={{id_moodle}}" class="btn btn-sm btn-success mt-1">
+                            <i class="fa fa-external-link-alt"></i> Acessar Curso (ID: {{id_moodle}})
+                        </a>
+                    {{/id_moodle}}
+                    {{^id_moodle}}
+                        <span class="badge bg-warning text-dark fs-6 mt-1">Não criado</span>
+                    {{/id_moodle}}
+                </div>
+            </div>
+
+            <!-- Linha 3: Período de Realização -->
+            <div class="row mb-3 pb-3 border-bottom">
+                <div class="col-md-3">
+                    <strong class="d-block text-muted small text-uppercase">Data de Início</strong>
+                    <span><i class="fa fa-calendar-alt text-muted me-1"></i> {{data_inicio}}</span>
+                </div>
+                <div class="col-md-3">
+                    <strong class="d-block text-muted small text-uppercase">Data de Término</strong>
+                    <span><i class="fa fa-calendar-check text-muted me-1"></i> {{data_fim}}</span>
+                </div>
+            </div>
+
+            <!-- Linha 4: Pessoas (Responsáveis e Ministrantes) -->
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <strong class="d-block text-muted small text-uppercase mb-2">Responsáveis</strong>
+                    {{#tem_responsaveis}}
+                        <ul class="list-group list-group-flush border-top">
+                            {{#responsaveis}}
+                                <li class="list-group-item px-0 py-2">
+                                    <i class="fa fa-user text-primary me-2"></i> {{nome}}
+                                </li>
+                            {{/responsaveis}}
+                        </ul>
+                    {{/tem_responsaveis}}
+                    {{^tem_responsaveis}}
+                        <span class="text-muted fst-italic">Nenhum responsável cadastrado.</span>
+                    {{/tem_responsaveis}}
+                </div>
+
+                <div class="col-md-6">
+                    <strong class="d-block text-muted small text-uppercase mb-2">Ministrantes</strong>
+                    {{#tem_ministrantes}}
+                        <ul class="list-group list-group-flush border-top">
+                            {{#ministrantes}}
+                                <li class="list-group-item px-0 py-2">
+                                    <i class="fa fa-graduation-cap text-success me-2"></i> {{nome}}
+                                </li>
+                            {{/ministrantes}}
+                        </ul>
+                    {{/tem_ministrantes}}
+                    {{^tem_ministrantes}}
+                        <span class="text-muted fst-italic">Nenhum ministrante cadastrado.</span>
+                    {{/tem_ministrantes}}
+                </div>
+            </div>
+
+            <!-- Linha 5: Matriculados -->
+            <div class="row pt-3 border-top">
+                <div class="col-md-12">
+                    <strong class="d-block text-muted small text-uppercase mb-2">
+                        <i class="fa fa-users text-info me-1"></i> Alunos Matriculados
+                    </strong>
+
+                    {{#tem_matriculados}}
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 150px;">Nº USP</th>
+                                        <th>Nome</th>
+                                        <th>E-mail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#matriculados}}
+                                    <tr>
+                                        <td><code>{{codpes}}</code></td>
+                                        <td>{{nome}}</td>
+                                        <td>{{email}}</td>
+                                    </tr>
+                                    {{/matriculados}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{/tem_matriculados}}
+
+                    {{^tem_matriculados}}
+                        <div class="alert alert-light text-muted fst-italic mb-0">
+                            Nenhum aluno matriculado encontrado para esta atividade.
+                        </div>
+                    {{/tem_matriculados}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{/turma}}
+    {{/encontrado}}
+
+    {{^encontrado}}
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <i class="fa fa-exclamation-triangle fa-2x me-3"></i>
+        <div>
+            <strong>Nenhum turma encontrada!</strong><br>
+            Não existe nenhum registro referente ao código de oferecimento <code>{{codofeatvceu_buscado}}</code>.
+        </div>
+    </div>
+    <a href="{{wwwroot}}/blocks/extensao/pages/ambientes.php" class="btn btn-secondary">
+        <i class="fa fa-arrow-left"></i> Voltar para a busca
+    </a>
+    {{/encontrado}}
+
+
+</div>

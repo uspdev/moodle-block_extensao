@@ -281,15 +281,15 @@ class Query
     $query = " 
       SELECT DISTINCT
           m.codpes
-      FROM " . $this->MATRICULACURSOCEU . " m
-      INNER JOIN " . $this->MATRICULAATIVIDADECEU . "  ma
-        ON ma.codmtrcurceu = m.codmtrcurceu
-      INNER JOIN " . $this->OFERECIMENTOATIVIDADECEU . "  o
+      FROM " . $this->OFERECIMENTOATIVIDADECEU . " o
+      INNER JOIN " . $this->MATRICULAATIVIDADECEU . " ma
         ON ma.codofeatvceu = o.codofeatvceu
-      WHERE o.codofeatvceu = convert(int,$codofeatvceu)
-        AND o.codedicurceu = o.codedicurceu
-        AND m.codund = o.codund
-        AND ma.stamtratvceu = 'M'
+       AND ma.stamtratvceu = 'M'
+      INNER JOIN " . $this->MATRICULACURSOCEU . " m
+        ON m.codmtrcurceu = ma.codmtrcurceu
+       AND m.codedicurceu = o.codedicurceu
+       AND m.codund = o.codund
+      WHERE o.codofeatvceu = CONVERT(int, $codofeatvceu)
     ";
     $result = USPDatabase::fetchAll($query);
     if($result)

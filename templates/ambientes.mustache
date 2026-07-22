@@ -72,6 +72,7 @@
                     <th>Moodle</th>
                     <th>Início</th>
                     <th>Fim</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,12 +124,17 @@
                     </td>
                     <td>{{data_inicio}}</td>
                     <td>{{data_fim}}</td>
+                    <td>
+                        <a href="{{wwwroot}}/blocks/extensao/pages/turma.php?codofeatvceu={{codofeatvceu}}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa fa-eye"></i> Detalhes
+                        </a>
+                    </td>
                 </tr>
                 {{/turmas}}
 
                 {{^tem_registros}}
                 <tr>
-                    <td colspan="8" class="text-center p-4">
+                    <td colspan="9" class="text-center p-4">
                         <p class="mb-0 text-muted">Nenhuma turma encontrada.</p>
                     </td>
                 </tr>

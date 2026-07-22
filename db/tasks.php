@@ -17,5 +17,14 @@ $tasks = [
     'day'       => '*',
     'month'     => '*',
     'dayofweek' => '*',
+  ],
+  [
+    'classname' => 'block_extensao\task\sincronizar_matriculados',
+    'blocking' => 0,
+    'minute' => '0',
+    'hour' => '0',
+    'day' => '*',
+    'dayofweek' => '*',
+    'month' => '*'
   ]
 ];

@@ -6,6 +6,7 @@ $string['pluginname'] = 'USP Extensão';
 
 // Tasks
 $string['task_sincronizar'] = 'Synchronization with Apolo database';
+$string['task_sincronizar_matriculados'] = 'Synchronize enrolled students from active Extension classes';
 
 // Notificacoes
 $string['notificacao_inscricao_assunto'] = 'Course environment created';
