@@ -43,9 +43,13 @@ class Ambiente {
     // transforma o enviado em um objeto de curso
     $curso = self::criar_objeto_curso($info_forms, $info_curso_apolo);
 
-    // cria o curso
-    $moodle_curso = \create_course($curso);
-    
+    // Antes de criar o curso, verifica se o curso já existe
+    $moodle_curso = $DB->get_record('course', ['shortname' => $curso->shortname]);
+    if (!$moodle_curso) {
+      // cria o curso
+      $moodle_curso = \create_course($curso);
+    }
+
     // se a opcao de visitantes estiver habilitada, precisa adicionar o usuario guest 
     if ($info_forms->guest) {
       // Obter o plugin de matricula "guest"

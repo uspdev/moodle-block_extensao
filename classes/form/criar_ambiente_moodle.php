@@ -155,13 +155,6 @@ class criar_ambiente_moodle extends \moodleform {
    */ 
   public function validation($data, $files) {
     $errors= array();
-    
-    // validacao do shortname
-    if (Ambiente::shortname_em_uso($data['shortname'])) {
-      $msg_shortname = 'O nome curto "' . $data['shortname'] . '" já está em uso. Por favor, escolha outro.';
-      \core\notification::error($msg_shortname);
-      $errors['shortname'] = $msg_shortname;
-    }
 
     // validacao do codofeatvceu
     if (Turmas::ambiente_criado_turma($data['codofeatvceu'])) {
