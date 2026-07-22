@@ -27,16 +27,18 @@ O plugin possui as seguintes configurações:
 
 ## Itens para conversar reunião 2026062602:
 
-- Nova tela de administração de cursos do apolo (falta fazer um show dos cursos para mostrar matriculados para conferência)
-- Os responsáveis do curso no Apolo agora podem criar qualquer disciplina do curso (resolve problema apontados por Ettore/Adriana)
-- Alunos são inseridos via cron (não foi feito novo plugin) - Nova configuração do plugin das tabelas de matriculados no apolo
-- Conpuesp
+-[x] Nova tela de administração de cursos do apolo (falta fazer um show dos cursos para mostrar matriculados para conferência)
+Sugestão: para o gerente mostrar por contexto (filtrando a unidade). Ter o botão de criar a turma. 
+
+-[x] Os responsáveis do curso no Apolo agora podem criar qualquer disciplina do curso (resolve problema apontados por Ettore/Adriana)
+-[x] Alunos são inseridos via cron (não foi feito novo plugin) - Nova configuração do plugin das tabelas de matriculados no apolo
+-[ ] Conpuesp
 
 Pendências Thiago:
 
-- Nova tela de administração falta fazer um show dos cursos para mostrar matriculados no Apolo para conferência
-- Fazer um task scheduled para atualizar os estudantes com apolo somente dos cursos ainda não finalizados
-- Na inscrição da matricula dos estuantes, fazer um merge entre usuários dos duplicados (Leônidas)?
-- Trocar cepaview para uspdb-sync 
-- Gerente de categoria criar curso é útil?
-- Falta fazer o form de solicitição de novos ambientes não apolo (com aprovação peja CCeX)
+-[ ] Nova tela de administração falta fazer um show dos cursos para mostrar matriculados no Apolo para conferência
+-[ ] Fazer um task scheduled para atualizar os estudantes com apolo somente dos cursos ainda não finalizados
+-[ ] Na inscrição da matrícula dos estuantes, fazer um merge entre usuários dos duplicados (Leônidas)? - Olhar plugin auth_cpf
+-[ ] Trocar cepaview para uspdb-sync
+-[ ] Gerente de categoria criar curso é útil?
+-[ ] Falta fazer o form de solicitição de novos ambientes não apolo (com aprovação peja CCeX)
