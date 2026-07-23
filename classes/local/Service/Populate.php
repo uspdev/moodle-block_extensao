@@ -149,13 +149,6 @@ class Populate {
   private function objetoTurmas (array $turmas) {
     date_default_timezone_set('America/Sao_Paulo');
 
-    // Coletar a quantidade de matriculados
-    // Pega os códigos, remove nulos/vazios e elimina duplicados
-    cli_writeln("# Coletando totais de matriculados em cada turma");
-    $lista_codofeatvceu = array_unique(array_filter(array_column($turmas, 'codofeatvceu')));
-    $turmas_matriculados = (new Query())->totalMatriculados($lista_codofeatvceu);
-    $totaisIndexados = array_column($turmas_matriculados, 'total', 'codofeatvceu');
-
     $turmas_objetos = array();
     foreach ($turmas as $turma) {
       $obj = new \stdClass;
@@ -169,7 +162,6 @@ class Populate {
       $obj->nomatvceu = $turma['nomatvceu'];
       $obj->codcam = $turma['codcam'];
       $obj->objcur = $turma['objcur'];
-      $obj->total_matriculados = isset($totaisIndexados[$turma['codofeatvceu']]) ? $totaisIndexados[$turma['codofeatvceu']] : 0;
       $obj->dtainiofeatv = is_null($turma['dtainiofeatv']) ? $turma['dtainiofeatv'] : strtotime($turma['dtainiofeatv']);
       $obj->dtafimofeatv = is_null($turma['dtafimofeatv']) ? $turma['dtafimofeatv'] : strtotime($turma['dtafimofeatv']);
       $obj->data_importacao = time(); // Data de importacao
