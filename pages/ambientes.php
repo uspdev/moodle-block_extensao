@@ -140,7 +140,6 @@ if ($registros) {
             'numseqofeedi'       => $r->numseqofeedi,
             'sglund'             => $r->sglund,
             'nomatvceu'          => $r->nomatvceu,
-            'total_matriculados' => $r->total_matriculados,
             'id_moodle'          => $r->id_moodle,
             'data_inicio'        => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
             'data_fim'           => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',
