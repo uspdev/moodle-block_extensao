@@ -88,7 +88,14 @@
                         {{#tem_responsaveis}}
                             <ul class="list-unstyled mb-0">
                                 {{#responsaveis}}
-                                    <li><i class="fa fa-user text-muted small"></i> {{nome}}</li>
+                                    <li>
+                                        {{#url_logar_como}}
+                                            <a href="{{url_logar_como}}" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user small"></i></a>
+                                        {{/url_logar_como}}
+                                        {{^url_logar_como}}<i class="fa fa-user text-muted small"></i>{{/url_logar_como}}
+                                        {{nome}}
+                                    </li>
                                 {{/responsaveis}}
                             </ul>
                         {{/tem_responsaveis}}
@@ -102,7 +109,14 @@
                         {{#tem_ministrantes}}
                             <ul class="list-unstyled mb-0">
                                 {{#ministrantes}}
-                                    <li><i class="fa fa-graduation-cap text-muted small"></i> {{nome}}</li>
+                                    <li>
+                                        {{#url_logar_como}}
+                                            <a href="{{url_logar_como}}" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user small"></i></a>
+                                        {{/url_logar_como}}
+                                        {{^url_logar_como}}<i class="fa fa-user text-muted small"></i>{{/url_logar_como}}
+                                        {{nome}}
+                                    </li>
                                 {{/ministrantes}}
                             </ul>
                         {{/tem_ministrantes}}

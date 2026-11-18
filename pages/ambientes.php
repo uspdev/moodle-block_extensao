@@ -108,26 +108,44 @@ if ($registros) {
             }
 
             // Verifica se é responsável (considerando que 1 = Sim)
+            $pessoa = [
+                'nome'   => format_string($m->codpes) . ' - ' . format_string($m->nompes) . ' (' . $m->codema . ')',
+                'codpes' => $m->codpes,
+            ];
             if ((int)$m->responsavel === 1) {
-                $ministrantes_por_turma[$cod]['responsaveis'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes) . ' (' . $m->codema . ')';
+                $ministrantes_por_turma[$cod]['responsaveis'][] = $pessoa;
             } else {
-                $ministrantes_por_turma[$cod]['ministrantes'][] = format_string($m->codpes) . ' - ' . format_string($m->nompes) . ' (' . $m->codema . ')';
+                $ministrantes_por_turma[$cod]['ministrantes'][] = $pessoa;
             }
         }
     }
 
+    // Somente o site admin pode "logar como" responsável/ministrante
+    $pode_logar_como = is_siteadmin();
+    $formatar_pessoa = function($pessoa, $codofeatvceu) use ($pode_logar_como) {
+        if ($pode_logar_como) {
+            $url = new moodle_url('/blocks/extensao/pages/logar_como.php', [
+                'codpes'       => $pessoa['codpes'],
+                'codofeatvceu' => $codofeatvceu,
+                'sesskey'      => sesskey(),
+            ]);
+            $pessoa['url_logar_como'] = $url->out(false);
+        }
+        return $pessoa;
+    };
+
     foreach ($registros as $r) {
         $responsaveis_formatados = [];
         if (!empty($ministrantes_por_turma[$r->codofeatvceu]['responsaveis'])) {
-            foreach ($ministrantes_por_turma[$r->codofeatvceu]['responsaveis'] as $nome) {
-                $responsaveis_formatados[] = ['nome' => $nome];
+            foreach ($ministrantes_por_turma[$r->codofeatvceu]['responsaveis'] as $pessoa) {
+                $responsaveis_formatados[] = $formatar_pessoa($pessoa, $r->codofeatvceu);
             }
         }
 
         $ministrantes_formatados = [];
         if (!empty($ministrantes_por_turma[$r->codofeatvceu]['ministrantes'])) {
-            foreach ($ministrantes_por_turma[$r->codofeatvceu]['ministrantes'] as $nome) {
-                $ministrantes_formatados[] = ['nome' => $nome];
+            foreach ($ministrantes_por_turma[$r->codofeatvceu]['ministrantes'] as $pessoa) {
+                $ministrantes_formatados[] = $formatar_pessoa($pessoa, $r->codofeatvceu);
             }
         }
 

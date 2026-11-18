@@ -240,4 +240,54 @@ class Usuario {
       return false;
     }
   }
+  /**
+   * Retorna o usuario Moodle de um codpes, criando a conta caso nao exista.
+   * Segue o mesmo padrao usado em Matriculados::cria_matriculados():
+   * busca por username ou idnumber e cria com auth 'shibboleth'.
+   *
+   * @param int    $codpes Numero USP.
+   * @param string $nompes Nome completo (usado apenas na criacao).
+   * @param string $codema E-mail (usado apenas na criacao).
+   * @return \stdClass Registro de {user}.
+   */
+  public static function obter_ou_criar_por_codpes($codpes, $nompes, $codema) {
+    global $DB;
+
+    $codpes = trim((string) $codpes);
+
+    $existente = $DB->get_record_select(
+      'user',
+      'deleted = 0 AND (username = :username OR idnumber = :idnumber)',
+      ['username' => $codpes, 'idnumber' => $codpes],
+      '*',
+      IGNORE_MULTIPLE
+    );
+    if ($existente) return $existente;
+
+    // Sem e-mail na tabela local, tenta capturar no Apolo
+    if (empty($codema)) {
+      try {
+        $info = (new Service\Query())->informacoesUsuario([(int) $codpes]);
+        if (!empty($info[0]['codema'])) $codema = $info[0]['codema'];
+      } catch (\Throwable $e) {
+        // Sem conexao com o Apolo: cria a conta sem e-mail
+      }
+    }
+
+    $partes = preg_split('/\s+/', trim($nompes));
+    $firstname = array_shift($partes);
+    $lastname = implode(' ', $partes);
+
+    $novo = new \stdClass();
+    $novo->username  = $codpes;
+    $novo->idnumber  = $codpes;
+    $novo->firstname = $firstname;
+    $novo->lastname  = $lastname;
+    $novo->email     = (string) $codema;
+    $novo->auth      = 'shibboleth';
+    $novo->confirmed = 1;
+
+    $novo->id = user_create_user($novo, false, false);
+    return $DB->get_record('user', ['id' => $novo->id], '*', MUST_EXIST);
+  }
 }
