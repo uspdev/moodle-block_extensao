@@ -118,6 +118,7 @@
                                         <th style="width: 150px;">Nº USP</th>
                                         <th>Nome</th>
                                         <th>E-mail</th>
+                                        {{#tem_curso_moodle}}<th>No curso Moodle</th>{{/tem_curso_moodle}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,6 +127,19 @@
                                         <td><code>{{codpes}}</code></td>
                                         <td>{{nome}}</td>
                                         <td>{{email}}</td>
+                                        {{#tem_curso_moodle}}
+                                        <td>
+                                            {{#inscrito}}
+                                                {{#inscrito_ativo}}<span class="badge bg-success">Inscrito</span>{{/inscrito_ativo}}
+                                                {{^inscrito_ativo}}<span class="badge bg-warning text-dark">Inscrito (suspenso)</span>{{/inscrito_ativo}}
+                                                {{#data_inscricao}}<small class="text-muted d-block">desde {{data_inscricao}}</small>{{/data_inscricao}}
+                                            {{/inscrito}}
+                                            {{^inscrito}}
+                                                <span class="badge bg-danger">Não inscrito</span>
+                                                {{#sem_conta}}<small class="text-muted d-block">sem conta no Moodle</small>{{/sem_conta}}
+                                            {{/inscrito}}
+                                        </td>
+                                        {{/tem_curso_moodle}}
                                     </tr>
                                     {{/matriculados}}
                                 </tbody>
