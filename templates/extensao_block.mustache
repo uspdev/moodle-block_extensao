@@ -20,8 +20,8 @@
   {{/formulario_em_lista}}
 {{/sem_cursos}}
 
-{{#is_admin}}
+{{#pode_ver_ambientes}}
   <a href="{{url_ambientes}}" class="btn btn-primary btn-block">
-    <i class="fa fa-cogs"></i> Gerenciar Ambientes
+    <i class="fa fa-cogs"></i> {{#is_admin}}Gerenciar Ambientes{{/is_admin}}{{^is_admin}}Meus Ambientes{{/is_admin}}
   </a>
-{{/is_admin}}
+{{/pode_ver_ambientes}}

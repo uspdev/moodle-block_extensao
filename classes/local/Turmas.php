@@ -228,4 +228,29 @@ class Turmas {
     }
     return $turmas;
   }
+
+  /**
+   * Lista os codofeatvceu das turmas em que o usuario eh responsavel ou
+   * ministrante (tabela {block_extensao_ministrante}). O codpes do usuario
+   * eh lido do username ou do idnumber.
+   *
+   * @param \stdClass $usuario Registro de {user} (ex.: $USER).
+   * @return int[] Lista de codofeatvceu (vazia se nao for ministrante de nada).
+   */
+  public static function codofeatvceu_ministrante_usuario ($usuario) {
+    global $DB;
+
+    $codpes = [];
+    foreach ([$usuario->username ?? '', $usuario->idnumber ?? ''] as $valor) {
+      $valor = trim((string) $valor);
+      if ($valor !== '' && ctype_digit($valor)) $codpes[] = (int) $valor;
+    }
+    $codpes = array_unique($codpes);
+    if (empty($codpes)) return [];
+
+    list($insql, $params) = $DB->get_in_or_equal($codpes, SQL_PARAMS_NAMED);
+    return array_values(array_unique(array_map('intval', $DB->get_fieldset_select(
+      'block_extensao_ministrante', 'codofeatvceu', "codpes $insql", $params
+    ))));
+  }
 }

@@ -85,6 +85,10 @@ class block_extensao extends block_base {
         $context = context_system::instance();
         $infos['is_admin'] = has_capability('moodle/site:config', $context);
 
+        // Responsáveis/ministrantes também acessam a página de ambientes (só as próprias turmas)
+        $infos['pode_ver_ambientes'] = $infos['is_admin']
+            || (isloggedin() && !isguestuser() && !empty(Turmas::codofeatvceu_ministrante_usuario($USER)));
+
         // Link para página de gerencia de ambientes
         $infos['url_ambientes'] = (new moodle_url('/blocks/extensao/pages/ambientes.php'))->out(false);
 

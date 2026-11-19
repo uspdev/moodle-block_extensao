@@ -8,17 +8,28 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/tablelib.php');
 
-// 2. Esta Página é restrita estritamente a admins
+use block_extensao\local\Turmas;
+
+// 2. Acesso: admins veem todas as turmas; responsáveis/ministrantes veem
+// somente as turmas em que atuam. Qualquer outro usuário é barrado.
 require_login();
 $context = context_system::instance();
-require_capability('moodle/site:config', $context); 
+$is_admin = has_capability('moodle/site:config', $context);
+
+$turmas_permitidas = [];
+if (!$is_admin) {
+    $turmas_permitidas = Turmas::codofeatvceu_ministrante_usuario($USER);
+    if (empty($turmas_permitidas)) {
+        throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+    }
+}
 
 // 3. Configurações da Página (Metadados e Layout)
 $pageurl = new moodle_url('/blocks/extensao/pages/ambientes.php');
 $PAGE->set_url($pageurl);
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('pluginname', 'block_extensao'));
-$PAGE->set_heading('Painel de Administração de Ambientes - Apolo/Moodle');
+$PAGE->set_heading($is_admin ? 'Painel de Administração de Ambientes - Apolo/Moodle' : 'Meus Ambientes - Apolo/Moodle');
 
 // 4. Captura o termo de busca enviado via parâmetro GET
 $search = optional_param('search', '', PARAM_TEXT);
@@ -73,6 +84,13 @@ if ($filtro_moodle === 'com') {
     $where .= " AND (id_moodle IS NULL OR id_moodle = 0)";
 }
 
+// Não admin: restringe às turmas em que o usuário é responsável/ministrante
+if (!$is_admin) {
+    list($in_permitidas, $params_permitidas) = $DB->get_in_or_equal($turmas_permitidas, SQL_PARAMS_NAMED, 'permitida');
+    $where .= " AND codofeatvceu $in_permitidas";
+    $params += $params_permitidas;
+}
+
 // Busca os registros ordenando pelo código da oferta de forma decrescente
 $registros = $DB->get_records_select(
     'block_extensao_turma',
@@ -82,8 +100,6 @@ $registros = $DB->get_records_select(
 );
 
 
-// 4. Preparação dos dados para o Mustache
-$turmas_formatadas = [];
 // 4. Preparação dos dados para o Mustache
 $turmas_formatadas = [];
 if ($registros) {
@@ -181,6 +197,7 @@ echo $OUTPUT->render_from_template('block_extensao/ambientes', [
     'turmas'        => $turmas_formatadas,
     'sesskey'       => sesskey(),
     'wwwroot'       => $CFG->wwwroot,
+    'is_admin'      => $is_admin,
     'filtro_moodle_todos' => empty($filtro_moodle),
     'filtro_moodle_com'   => $filtro_moodle === 'com',
     'filtro_moodle_sem'   => $filtro_moodle === 'sem',
