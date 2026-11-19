@@ -1,19 +1,25 @@
 <?php
 /**
- * Página administrativa para detalhes de um turma Moodle/Apolo específico
+ * Detalhes de uma turma Moodle/Apolo (admin ou responsável/ministrante da turma)
  * Path: /blocks/extensao/pages/turma.php
  */
 
 // 1. Requerimentos do Moodle
 require_once(__DIR__ . '/../../../config.php');
 
-// 2. Restrição estrita a administradores
+use block_extensao\local\Turmas;
+
+// 2. Recebe o parâmetro obrigatório "codofeatvceu"
 require_login();
 $context = context_system::instance();
-require_capability('moodle/site:config', $context); 
-
-// 3. Recebe o parâmetro obrigatório "codofeatvceu"
 $codofeatvceu = required_param('codofeatvceu', PARAM_INT);
+
+// 3. Acesso: admin vê qualquer turma; responsável/ministrante só as turmas
+// em que atua. Qualquer outro usuário é barrado.
+if (!has_capability('moodle/site:config', $context)
+        && !in_array($codofeatvceu, Turmas::codofeatvceu_ministrante_usuario($USER), true)) {
+    throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+}
 
 // 4. Configurações da Página
 $pageurl = new moodle_url('/blocks/extensao/pages/turma.php', ['codofeatvceu' => $codofeatvceu]);
