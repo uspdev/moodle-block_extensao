@@ -1,6 +1,6 @@
 <?php
 /**
- * Detalhes de uma turma Moodle/Apolo (admin ou responsável/ministrante da turma)
+ * Detalhes de uma turma Moodle/Apolo (admin, responsável/ministrante da turma ou gerente da categoria)
  * Path: /blocks/extensao/pages/turma.php
  */
 
@@ -15,10 +15,19 @@ $context = context_system::instance();
 $codofeatvceu = required_param('codofeatvceu', PARAM_INT);
 
 // 3. Acesso: admin vê qualquer turma; responsável/ministrante só as turmas
-// em que atua. Qualquer outro usuário é barrado.
-if (!has_capability('moodle/site:config', $context)
-        && !in_array($codofeatvceu, Turmas::codofeatvceu_ministrante_usuario($USER), true)) {
-    throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+// em que atua; gerente de categoria só as turmas da unidade/campus da
+// categoria. Qualquer outro usuário é barrado.
+if (!has_capability('moodle/site:config', $context)) {
+    $filtro_usuario = Turmas::filtro_sql_turmas_usuario($USER);
+    $permitido = false;
+    if ($filtro_usuario !== null) {
+        list($where_usuario, $params_usuario) = $filtro_usuario;
+        $permitido = $DB->record_exists_select('block_extensao_turma',
+            "codofeatvceu = :codturma AND $where_usuario", ['codturma' => $codofeatvceu] + $params_usuario);
+    }
+    if (!$permitido) {
+        throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+    }
 }
 
 // 4. Configurações da Página

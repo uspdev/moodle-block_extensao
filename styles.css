@@ -233,6 +233,7 @@
 }
 
 .block-extensao-bloco .ext-bloco-ambientes {
+    margin-bottom: 1rem;
     color: var(--ext-primaria);
     border: 1px solid var(--ext-primaria);
     background-color: transparent;

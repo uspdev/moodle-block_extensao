@@ -253,4 +253,45 @@ class Turmas {
       'block_extensao_ministrante', 'codofeatvceu', "codpes $insql", $params
     ))));
   }
+
+  /**
+   * Filtro SQL (para {block_extensao_turma}) com as turmas que um usuario
+   * nao-admin pode ver nas paginas ambientes.php e turma.php:
+   *  - turmas em que eh responsavel/ministrante;
+   *  - turmas da unidade/campus das categorias em que eh gerente. Mesmo
+   *    criterio do bloco: idnumber da categoria = codund ou codcam da turma.
+   *
+   * @param \stdClass $usuario Registro de {user} (ex.: $USER).
+   * @return array|null [string $where, array $params], ou null se o usuario
+   *                    nao pode ver nenhuma turma.
+   */
+  public static function filtro_sql_turmas_usuario ($usuario) {
+    global $DB;
+
+    $condicoes = [];
+    $params = [];
+
+    $ministrante = self::codofeatvceu_ministrante_usuario($usuario);
+    if (!empty($ministrante)) {
+      list($in, $p) = $DB->get_in_or_equal($ministrante, SQL_PARAMS_NAMED, 'tmin');
+      $condicoes[] = "codofeatvceu $in";
+      $params += $p;
+    }
+
+    $idnumbers = [];
+    foreach (Categorias::usuario_gerente_categoria($usuario->id) as $categoria) {
+      if (!empty($categoria->idnumber)) $idnumbers[] = (string) $categoria->idnumber;
+    }
+    $idnumbers = array_values(array_unique($idnumbers));
+    if (!empty($idnumbers)) {
+      list($in_und, $p_und) = $DB->get_in_or_equal($idnumbers, SQL_PARAMS_NAMED, 'tund');
+      list($in_cam, $p_cam) = $DB->get_in_or_equal($idnumbers, SQL_PARAMS_NAMED, 'tcam');
+      $condicoes[] = "codund $in_und";
+      $condicoes[] = "codcam $in_cam";
+      $params += $p_und + $p_cam;
+    }
+
+    if (empty($condicoes)) return null;
+    return ['(' . implode(' OR ', $condicoes) . ')', $params];
+  }
 }

@@ -6,6 +6,13 @@
 }}
 <div class="block-extensao-bloco" id="block-extensao-{{uniqid}}">
 
+    {{#pode_ver_ambientes}}
+        <a href="{{url_ambientes}}" class="btn btn-sm ext-bloco-ambientes w-100">
+            <i class="fa fa-list" aria-hidden="true"></i>
+            {{#is_admin}}Gerenciar ambientes{{/is_admin}}{{^is_admin}}Meus ambientes{{/is_admin}}
+        </a>
+    {{/pode_ver_ambientes}}
+
     <div class="ext-bloco-titulo">
         <span>Cursos aguardando criação</span>
         {{^sem_cursos}}<span class="ext-bloco-total" title="{{total}} curso(s)">{{total}}</span>{{/sem_cursos}}
@@ -45,12 +52,6 @@
         {{/com_busca}}
     {{/sem_cursos}}
 
-    {{#pode_ver_ambientes}}
-        <a href="{{url_ambientes}}" class="btn btn-sm ext-bloco-ambientes w-100">
-            <i class="fa fa-list" aria-hidden="true"></i>
-            {{#is_admin}}Gerenciar ambientes{{/is_admin}}{{^is_admin}}Meus ambientes{{/is_admin}}
-        </a>
-    {{/pode_ver_ambientes}}
 </div>
 
 {{#com_busca}}

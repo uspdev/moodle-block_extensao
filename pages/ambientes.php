@@ -16,10 +16,12 @@ require_login();
 $context = context_system::instance();
 $is_admin = has_capability('moodle/site:config', $context);
 
-$turmas_permitidas = [];
+// Não admin: responsável/ministrante (turmas dele) ou gerente de categoria
+// (turmas da unidade/campus da categoria, mesmo critério do bloco)
+$filtro_usuario = null;
 if (!$is_admin) {
-    $turmas_permitidas = Turmas::codofeatvceu_ministrante_usuario($USER);
-    if (empty($turmas_permitidas)) {
+    $filtro_usuario = Turmas::filtro_sql_turmas_usuario($USER);
+    if ($filtro_usuario === null) {
         throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
     }
 }
@@ -84,12 +86,11 @@ if ($filtro_moodle === 'com') {
     $where .= " AND (id_moodle IS NULL OR id_moodle = 0)";
 }
 
-// Não admin: restringe às turmas em que o usuário é responsável/ministrante
+// Não admin: restringe às turmas que o usuário pode ver
 $where_permitidas = '1=1';
 $params_permitidas = [];
 if (!$is_admin) {
-    list($in_permitidas, $params_permitidas) = $DB->get_in_or_equal($turmas_permitidas, SQL_PARAMS_NAMED, 'permitida');
-    $where_permitidas = "codofeatvceu $in_permitidas";
+    list($where_permitidas, $params_permitidas) = $filtro_usuario;
     $where .= " AND $where_permitidas";
     $params += $params_permitidas;
 }
