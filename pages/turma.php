@@ -93,6 +93,12 @@ if ($r) {
         'matriculados'       => $matriculados_formatados,
         'tem_matriculados'   => !empty($matriculados_formatados),
         'id_moodle'          => $r->id_moodle,
+        // Quem acessa esta página (admin ou responsável/ministrante da turma)
+        // pode criar o ambiente; criar_ambiente.php valida de novo.
+        'url_criar'          => (new moodle_url('/blocks/extensao/pages/criar_ambiente.php', [
+            'turma'   => $r->codofeatvceu,
+            'sesskey' => sesskey(),
+        ]))->out(false),
         'data_inicio'        => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
         'data_fim'           => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',
         'responsaveis'       => $responsaveis_formatados,
