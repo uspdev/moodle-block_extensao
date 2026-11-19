@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutorial Cursos de Extensão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primaria: #0d94ab;
+    --primaria-escura: #0b7d91;
+    --primaria-clara: #e7f5f8;
+    --destaque: #FFB500;
+    --destaque-claro: #fff6df;
+    --texto: #1d2125;
+    --texto-suave: #5b6670;
+    --fundo: #f9f9f9;
+    --cartao: #ffffff;
+    --borda: #dee2e6;
+    --seta: #e4002b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --primaria: #3cb8cd; --primaria-escura: #6fcddc; --primaria-clara: #12343b;
+      --destaque: #ffc533; --destaque-claro: #3a3016;
+      --texto: #e8eaed; --texto-suave: #a9b2ba; --fundo: #15191c; --cartao: #1e2327; --borda: #343b41;
+    }
+  }
+  :root[data-theme="dark"] {
+    --primaria: #3cb8cd; --primaria-escura: #6fcddc; --primaria-clara: #12343b;
+    --destaque: #ffc533; --destaque-claro: #3a3016;
+    --texto: #e8eaed; --texto-suave: #a9b2ba; --fundo: #15191c; --cartao: #1e2327; --borda: #343b41;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body { margin: 0; font-family: Roboto, Arial, sans-serif; color: var(--texto); background: var(--fundo); line-height: 1.6; font-size: 16px; }
+  a { color: var(--primaria); }
+
+  header.topo { position: sticky; top: 0; z-index: 10; background: #0d94ab; border-top: 5px solid #FFB500;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 25%); color: #fff; }
+  header.topo .barra { max-width: 1280px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  header.topo h1 { font-size: 1.15rem; margin: 0; font-weight: 500; }
+  header.topo .sub { opacity: .85; font-size: .9rem; }
+  header.topo button { margin-left: auto; background: transparent; color: #fff; border: 1px solid rgb(255 255 255 / 60%);
+    border-radius: 6px; padding: 4px 10px; font: inherit; font-size: .85rem; cursor: pointer; }
+
+  .layout { max-width: 1280px; margin: 0 auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 260px 1fr; gap: 32px; }
+  nav.indice { position: sticky; top: 92px; align-self: start; max-height: calc(100vh - 110px); overflow-y: auto;
+    background: var(--cartao); border: 1px solid var(--borda); border-radius: 10px; padding: 16px; font-size: .92rem; }
+  nav.indice strong { display: block; color: var(--primaria-escura); text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; margin: 12px 0 4px; }
+  nav.indice strong:first-child { margin-top: 0; }
+  nav.indice a { display: block; text-decoration: none; color: var(--texto); padding: 3px 8px; border-left: 3px solid transparent; border-radius: 0 4px 4px 0; }
+  nav.indice a:hover { background: var(--primaria-clara); border-left-color: var(--destaque); }
+
+  main { min-width: 0; }
+  section { background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 24px 28px; margin-bottom: 24px; }
+  h2 { margin: 0 0 4px; font-size: 1.6rem; }
+  h2 + .linha { height: 3px; width: 64px; background: var(--destaque); border-radius: 2px; margin-bottom: 16px; }
+  h3 { font-size: 1.2rem; margin: 28px 0 8px; color: var(--primaria-escura); }
+  .parte { display: inline-block; background: var(--primaria); color: #fff; border-radius: 999px; padding: 2px 12px; font-size: .8rem; font-weight: 500; margin-bottom: 8px; }
+  .parte.gerente { background: #6a4c93; }
+
+  figure { margin: 16px 0 8px; }
+  figure a { display: block; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--borda); border-radius: 8px; background: #fff;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 8%); }
+  figure.estreita img { max-width: 520px; }
+  figcaption { font-size: .88rem; color: var(--texto-suave); margin-top: 6px; }
+
+  ol.legenda { list-style: none; padding: 0; margin: 12px 0 0; counter-reset: n; }
+  ol.legenda li { counter-increment: n; position: relative; padding: 4px 0 4px 38px; }
+  ol.legenda li::before { content: counter(n); position: absolute; left: 0; top: 4px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--seta); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+
+  .dica, .atencao, .auto { border-radius: 8px; padding: 12px 16px; margin: 16px 0; border-left: 5px solid; }
+  .dica { background: var(--primaria-clara); border-color: var(--primaria); }
+  .atencao { background: var(--destaque-claro); border-color: var(--destaque); }
+  .auto { background: var(--primaria-clara); border-color: var(--primaria-escura); }
+  .dica b:first-child, .atencao b:first-child, .auto b:first-child { display: block; margin-bottom: 2px; }
+
+  .passos { counter-reset: p; list-style: none; padding: 0; }
+  .passos > li { counter-increment: p; position: relative; padding: 2px 0 10px 44px; }
+  .passos > li::before { content: counter(p); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 8px;
+    background: var(--destaque); color: #1d2125; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+  table.tab { border-collapse: collapse; width: 100%; font-size: .93rem; margin: 12px 0; }
+  table.tab th { background: var(--primaria); color: #fff; text-align: left; padding: 8px 10px; font-weight: 500; }
+  table.tab td { border-bottom: 1px solid var(--borda); padding: 8px 10px; vertical-align: top; }
+  .tabela-rolavel { overflow-x: auto; }
+
+  .linha-do-tempo { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+  .linha-do-tempo div { background: var(--primaria-clara); border-radius: 10px; padding: 12px 14px; border-top: 4px solid var(--primaria); }
+  .linha-do-tempo b { display: block; color: var(--primaria-escura); }
+  details { border: 1px solid var(--borda); border-radius: 8px; padding: 10px 14px; margin: 8px 0; background: var(--cartao); }
+  details summary { cursor: pointer; font-weight: 500; }
+  .badge { display: inline-block; font-size: .78rem; font-weight: 700; border-radius: 6px; padding: 1px 7px; color: #fff; }
+  .b-verde { background: #357a32; } .b-amarelo { background: #f0ad4e; color: #1d2125; } .b-vermelho { background: #ca3120; }
+  .kbd { font-weight: 500; background: var(--destaque); color: #1d2125; border-radius: 6px; padding: 0 6px; white-space: nowrap; }
+  .kbd2 { font-weight: 500; border: 1px solid var(--primaria); color: var(--primaria); border-radius: 6px; padding: 0 6px; white-space: nowrap; }
+  footer { text-align: center; color: var(--texto-suave); font-size: .85rem; padding: 0 16px 32px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.indice { position: static; max-height: none; }
+    section { padding: 18px 16px; }
+    figure.estreita img { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="barra">
+    <div>
+      <h1>Cursos de Extensão no Moodle — Tutorial</h1>
+      <div class="sub">Para responsáveis, ministrantes e gerentes de categoria</div>
+    </div>
+    <button type="button" id="tema" aria-label="Alternar tema claro/escuro">Tema</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="indice" aria-label="Índice">
+    <strong>Começando</strong>
+    <a href="#visao-geral">Visão geral</a>
+    <a href="#automatico">O que acontece sozinho</a>
+    <strong>Responsáveis e ministrantes</strong>
+    <a href="#bloco">O bloco USP Extensão</a>
+    <a href="#bloco-busca">Muitos cursos</a>
+    <a href="#criar">Criar o ambiente</a>
+    <a href="#apos-criar">Depois de criar</a>
+    <a href="#alunos">Inscrição dos alunos</a>
+    <a href="#meus-ambientes">Meus ambientes</a>
+    <a href="#detalhes">Detalhes da turma</a>
+    <a href="#acesso">Quem vê o quê</a>
+    <strong>Gerentes de categoria</strong>
+    <a href="#gerente">O que muda</a>
+    <a href="#gerente-bloco">Bloco</a>
+    <a href="#gerente-ambientes">Ambientes da unidade</a>
+    <a href="#gerente-criar">Criar ambiente</a>
+    <strong>Ajuda</strong>
+    <a href="#duvidas">Dúvidas frequentes</a>
+    <a href="#glossario">Glossário</a>
+  </nav>
+
+  <main>
+
+    <section id="visao-geral">
+      <h2>Visão geral</h2><div class="linha"></div>
+      <p>O Moodle dos cursos de extensão (<a href="https://cursosextensao.usp.br" target="_blank">cursosextensao.usp.br</a>) está ligado ao <b>Apolo</b>.
+        Cada turma do Apolo pode ganhar um <b>ambiente</b>: um curso no Moodle para materiais, atividades e comunicação com os alunos.</p>
+      <ul>
+        <li>As turmas sem ambiente aparecem no seu <b>Painel</b>, prontas para criar com poucos cliques.</li>
+        <li>Os outros ministrantes podem ser inscritos de uma vez.</li>
+        <li>Os alunos matriculados no Apolo são <b>inscritos automaticamente</b>.</li>
+        <li>A tela <b>Meus ambientes</b> reúne todas as suas turmas, e os <b>Detalhes</b> mostram quem já está no curso.</li>
+      </ul>
+      <p>Gerentes de categoria fazem o mesmo, para todas as turmas da sua unidade (<a href="#gerente">veja a segunda parte</a>).</p>
+    </section>
+
+    <section id="automatico">
+      <h2>O que acontece sozinho</h2><div class="linha"></div>
+      <div class="linha-do-tempo">
+        <div><b>Todo dia, de madrugada</b>Turmas e ministrantes são atualizados a partir do Apolo.</div>
+        <div><b>Logo após criar o ambiente</b>Os alunos são inscritos no curso (de minutos a algumas horas).</div>
+        <div><b>Todo dia, de madrugada</b>Novos matriculados no Apolo entram no curso, enquanto ele não terminou.</div>
+      </div>
+      <div class="atencao"><b>Importante</b>A sincronização só <b>acrescenta</b> alunos. Quem cancelar a matrícula no Apolo continua no curso.</div>
+    </section>
+
+    <section id="bloco">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>O bloco USP Extensão</h2><div class="linha"></div>
+      <p>Entre em <a href="https://cursosextensao.usp.br" target="_blank">cursosextensao.usp.br</a> e vá ao <b>Painel</b>. O bloco fica na gaveta da direita; se ela estiver fechada, clique em <b>&lsaquo;</b> no canto superior direito.</p>
+      <figure>
+        <a href="img/01-painel.png" target="_blank"><img src="img/01-painel.png" alt="Painel com o bloco USP Extensão destacado"></a>
+      </figure>
+      <figure class="estreita">
+        <a href="img/02-bloco.png" target="_blank"><img src="img/02-bloco.png" alt="Bloco com quatro cursos aguardando criação"></a>
+      </figure>
+      <ol class="legenda">
+        <li><span class="kbd2">Meus ambientes</span>: todas as suas turmas, com ou sem ambiente.</li>
+        <li>Quantas turmas suas ainda não têm ambiente.</li>
+        <li>Nome do curso e da turma (passe o mouse para ver o nome inteiro).</li>
+        <li>Código da turma no Apolo e período.</li>
+        <li><span class="kbd">+ Criar ambiente</span>: abre o formulário já preenchido.</li>
+      </ol>
+      <div class="dica"><b>Quais turmas aparecem?</b>As turmas sem ambiente em que você é Professor USP, Especialista ou Professor HC. Monitores e servidores encontram suas turmas em <a href="#meus-ambientes">Meus ambientes</a>.</div>
+    </section>
+
+    <section id="bloco-busca">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Muitos cursos</h2><div class="linha"></div>
+      <p>Com mais de cinco turmas, o bloco ganha uma busca e a lista passa a rolar.</p>
+      <figure class="estreita">
+        <a href="img/03-bloco-muitos.png" target="_blank"><img src="img/03-bloco-muitos.png" alt="Bloco com 18 cursos e caixa de busca"></a>
+      </figure>
+      <ol class="legenda">
+        <li>Busca por nome ou código (acentos e maiúsculas não importam).</li>
+        <li>Lista com rolagem; cada curso tem seu botão.</li>
+      </ol>
+      <figure class="estreita">
+        <a href="img/04-bloco-busca.png" target="_blank"><img src="img/04-bloco-busca.png" alt="Bloco filtrado por toefl"></a>
+      </figure>
+      <ol class="legenda">
+        <li>Ao digitar <i>toefl</i>…</li>
+        <li>…ficam só os cursos correspondentes. Dá para usar várias palavras.</li>
+      </ol>
+    </section>
+
+    <section id="criar">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Criar o ambiente</h2><div class="linha"></div>
+      <p>Clique em <span class="kbd">+ Criar ambiente</span> (no bloco, em Meus ambientes ou nos Detalhes). O formulário abre com os dados do Apolo.</p>
+      <figure>
+        <a href="img/10-form-criar.png" target="_blank"><img src="img/10-form-criar.png" alt="Formulário Novo ambiente de apoio"></a>
+      </figure>
+      <ol class="legenda">
+        <li><b>Nome curto</b>: código da turma (fixo).</li>
+        <li><b>Nome completo</b>: curso, turma e ano (fixo).</li>
+        <li><b>Início</b> do curso, vindo do Apolo.</li>
+        <li><b>Fim</b> do curso: data do Apolo <b>mais um período adicional</b> (hoje, 2 meses), para os alunos continuarem acessando o material.</li>
+        <li>Em vermelho, o fim original no Apolo.</li>
+        <li><b>Descrição</b>, vinda do Apolo. Revise agora: depois de criado o curso, ela não pode mais ser alterada.</li>
+        <li><b>Aberto ao público?</b> “Sim” deixa qualquer visitante ver o conteúdo.</li>
+        <li><b>Outros ministrantes</b>: os marcados são inscritos com você.</li>
+        <li><span class="kbd">Criar ambiente</span>.</li>
+      </ol>
+      <p>O ícone <b>?</b> ao lado de um campo mostra uma explicação:</p>
+      <figure>
+        <a href="img/11-form-ajuda.png" target="_blank"><img src="img/11-form-ajuda.png" alt="Ajuda do campo Data do fim do curso"></a>
+      </figure>
+    </section>
+
+    <section id="apos-criar">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Depois de criar</h2><div class="linha"></div>
+      <p>Você é levado ao novo curso, com mensagens sobre o que foi feito.</p>
+      <figure>
+        <a href="img/12-criado.png" target="_blank"><img src="img/12-criado.png" alt="Curso recém-criado com mensagens de confirmação"></a>
+      </figure>
+      <div class="tabela-rolavel">
+      <table class="tab">
+        <tr><th>Mensagem</th><th>Significado</th></tr>
+        <tr><td><span class="badge b-verde">verde</span> Ambiente criado com sucesso!</td><td>Curso criado na categoria da sua unidade.</td></tr>
+        <tr><td><span class="badge b-verde">verde</span> Alunos em processo de sincronização…</td><td>A inscrição dos alunos foi para a fila (<a href="#alunos">veja abaixo</a>).</td></tr>
+        <tr><td><span class="badge b-verde">verde</span> Usuário criador matriculado como “professor”</td><td>Você está no curso como professor.</td></tr>
+        <tr><td><span class="badge b-verde">verde</span> Professor auxiliar <i>Fulano</i> matriculado…</td><td>Ministrante marcado foi inscrito como professor (se não tinha conta, ela foi criada).</td></tr>
+        <tr><td><span class="badge b-vermelho">vermelho</span> …não há e-mail cadastrado no Apolo</td><td>O ministrante não pôde ser inscrito. Peça que atualize o e-mail no Apolo e inscreva-o depois em <b>Participantes</b>.</td></tr>
+        <tr><td><span class="badge b-vermelho">vermelho</span> A opção de visitantes não está habilitada</td><td>Só confirma que você escolheu “Não” em “Aberto ao público?”.</td></tr>
+      </table>
+      </div>
+      <div class="dica"><b>Campos travados</b>Nas configurações do curso, <b>nome completo, nome breve, categoria, número de identificação e descrição</b> não podem ser alterados, pois vêm do Apolo. Datas e demais configurações continuam editáveis.</div>
+      <figure class="estreita">
+        <a href="img/16-bloco-depois.png" target="_blank"><img src="img/16-bloco-depois.png" alt="Bloco agora com três cursos"></a>
+      </figure>
+      <ol class="legenda">
+        <li>A turma sai do bloco e passa a ter <span class="kbd2">Acessar</span> em Meus ambientes.</li>
+      </ol>
+    </section>
+
+    <section id="alunos">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Inscrição dos alunos</h2><div class="linha"></div>
+      <p>Não é preciso inscrever ninguém. Acompanhe pela coluna <b>No curso Moodle</b> dos <a href="#detalhes">Detalhes da turma</a>.</p>
+      <figure>
+        <a href="img/14-turma-antes-sync.png" target="_blank"><img src="img/14-turma-antes-sync.png" alt="Alunos com situação Não inscrito"></a>
+        <figcaption>Logo após a criação: inscrições na fila.</figcaption>
+      </figure>
+      <figure>
+        <a href="img/15-turma-depois-sync.png" target="_blank"><img src="img/15-turma-depois-sync.png" alt="Alunos com situação Inscrito"></a>
+        <figcaption>Pouco depois: todos inscritos, com data e hora.</figcaption>
+      </figure>
+      <ul>
+        <li><span class="badge b-verde">Inscrito</span> no curso, desde a data indicada.</li>
+        <li><span class="badge b-amarelo">Inscrito (suspenso)</span> no curso, mas sem acesso.</li>
+        <li><span class="badge b-vermelho">Não inscrito</span> ainda não entrou; “sem conta no Moodle” indica que a conta será criada.</li>
+      </ul>
+    </section>
+
+    <section id="meus-ambientes">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Meus ambientes</h2><div class="linha"></div>
+      <p>Pelo botão <span class="kbd2">Meus ambientes</span> do bloco: todas as turmas em que você é responsável ou ministrante.</p>
+      <figure>
+        <a href="img/05-ambientes-filtros.png" target="_blank"><img src="img/05-ambientes-filtros.png" alt="Filtros"></a>
+      </figure>
+      <ol class="legenda">
+        <li><b>Unidade</b> (só as das suas turmas).</li>
+        <li><b>Nome do curso</b> ou código.</li>
+        <li><b>Período</b>: turmas que começam a partir da data inicial e terminam até a final. Padrão: 1º de janeiro do ano passado a 31 de dezembro do próximo ano.</li>
+        <li><b>Moodle</b>: todos, só com ambiente (<i>Criado</i>) ou só sem (<i>Não criado</i>).</li>
+        <li><span class="kbd">Buscar</span> / <span class="kbd2">Limpar</span>.</li>
+      </ol>
+      <figure>
+        <a href="img/06-ambientes-tabela.png" target="_blank"><img src="img/06-ambientes-tabela.png" alt="Tabela de turmas"></a>
+      </figure>
+      <ol class="legenda">
+        <li>Códigos de curso e turma abrem o Apolo.</li>
+        <li>Responsáveis.</li>
+        <li>Ministrantes.</li>
+        <li><span class="kbd">+ Criar ambiente</span>, se ainda não existe.</li>
+        <li>Início e fim da turma.</li>
+        <li><span class="kbd2">Detalhes</span> da turma.</li>
+        <li><span class="kbd2">Acessar</span> o curso, se já existe.</li>
+      </ol>
+      <figure>
+        <a href="img/07-ambientes-criados.png" target="_blank"><img src="img/07-ambientes-criados.png" alt="Filtro Criado"></a>
+        <figcaption>Exemplo: filtro Moodle = Criado.</figcaption>
+      </figure>
+    </section>
+
+    <section id="detalhes">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Detalhes da turma</h2><div class="linha"></div>
+      <p>Pelo botão <span class="kbd2">Detalhes</span> em Meus ambientes.</p>
+      <figure>
+        <a href="img/08-turma-sem-ambiente.png" target="_blank"><img src="img/08-turma-sem-ambiente.png" alt="Detalhes de turma sem ambiente"></a>
+      </figure>
+      <ol class="legenda">
+        <li><span class="kbd2">Voltar para a lista</span>.</li>
+        <li>Curso e turma, com links para o Apolo.</li>
+        <li><span class="kbd">+ Criar ambiente</span>, se ainda não existe.</li>
+        <li>Período.</li>
+        <li>Responsáveis.</li>
+        <li>Ministrantes.</li>
+        <li>Alunos matriculados no Apolo.</li>
+      </ol>
+      <figure>
+        <a href="img/09-turma-com-ambiente.png" target="_blank"><img src="img/09-turma-com-ambiente.png" alt="Detalhes de turma com ambiente"></a>
+      </figure>
+      <ol class="legenda">
+        <li><span class="kbd2">Acessar Curso</span>.</li>
+        <li>Com ambiente criado, aparece a coluna <b>No curso Moodle</b>…</li>
+        <li>…com a situação de cada aluno.</li>
+      </ol>
+    </section>
+
+    <section id="acesso">
+      <span class="parte">Responsáveis e ministrantes</span>
+      <h2>Quem vê o quê</h2><div class="linha"></div>
+      <div class="tabela-rolavel">
+      <table class="tab">
+        <tr><th>Perfil</th><th>Vê</th><th>Pode criar ambiente</th></tr>
+        <tr><td>Responsável / ministrante</td><td>Só as próprias turmas</td><td>Das próprias turmas</td></tr>
+        <tr><td>Gerente de categoria</td><td>Todas as turmas da unidade</td><td>De qualquer turma da unidade</td></tr>
+      </table>
+      </div>
+      <p>Ao abrir uma turma que não é sua, aparece:</p>
+      <figure>
+        <a href="img/19-sem-permissao.png" target="_blank"><img src="img/19-sem-permissao.png" alt="Mensagem sem permissão"></a>
+      </figure>
+    </section>
+
+    <section id="gerente">
+      <span class="parte gerente">Gerentes de categoria</span>
+      <h2>O que muda</h2><div class="linha"></div>
+      <p>O gerente usa as mesmas telas, mas vê e pode criar o ambiente de <b>todas as turmas da sua unidade</b>, de qualquer ministrante. Turmas de outras unidades continuam fora do alcance.</p>
+    </section>
+
+    <section id="gerente-bloco">
+      <span class="parte gerente">Gerentes de categoria</span>
+      <h2>Bloco</h2><div class="linha"></div>
+      <figure class="estreita">
+        <a href="img/20-gerente-bloco.png" target="_blank"><img src="img/20-gerente-bloco.png" alt="Bloco do gerente"></a>
+      </figure>
+      <ol class="legenda">
+        <li><span class="kbd2">Meus ambientes</span>: todas as turmas da unidade.</li>
+        <li>Turmas da unidade sem ambiente.</li>
+        <li>Busca por nome ou código.</li>
+        <li>Qualquer uma pode ser criada.</li>
+      </ol>
+    </section>
+
+    <section id="gerente-ambientes">
+      <span class="parte gerente">Gerentes de categoria</span>
+      <h2>Ambientes da unidade</h2><div class="linha"></div>
+      <figure>
+        <a href="img/21-gerente-ambientes.png" target="_blank"><img src="img/21-gerente-ambientes.png" alt="Ambientes da unidade"></a>
+      </figure>
+      <ol class="legenda">
+        <li><b>Unidade</b>: as que você gerencia.</li>
+        <li>Turmas de todos os ministrantes da unidade.</li>
+        <li><span class="kbd">+ Criar ambiente</span>.</li>
+        <li><span class="kbd2">Detalhes</span>.</li>
+      </ol>
+      <figure>
+        <a href="img/22-gerente-turma.png" target="_blank"><img src="img/22-gerente-turma.png" alt="Detalhes de turma da unidade"></a>
+      </figure>
+      <ol class="legenda">
+        <li>Turma da sua unidade: abre mesmo sem você ser ministrante.</li>
+        <li><span class="kbd">+ Criar ambiente</span>.</li>
+      </ol>
+    </section>
+
+    <section id="gerente-criar">
+      <span class="parte gerente">Gerentes de categoria</span>
+      <h2>Criar ambiente</h2><div class="linha"></div>
+      <p>Mesmo formulário de <a href="#criar">Criar o ambiente</a>, com duas diferenças:</p>
+      <figure>
+        <a href="img/23-gerente-form.png" target="_blank"><img src="img/23-gerente-form.png" alt="Final do formulário aberto pelo gerente"></a>
+      </figure>
+      <ol class="legenda">
+        <li>Todos os ministrantes da turma aparecem, já marcados.</li>
+        <li>O gerente também entra no curso como professor (pode sair depois em <b>Participantes</b>).</li>
+      </ol>
+    </section>
+
+    <section id="duvidas">
+      <h2>Dúvidas frequentes</h2><div class="linha"></div>
+      <details><summary>Minha turma não aparece no bloco.</summary>
+        <p>Turmas novas chegam do Apolo de madrugada. Confira também se você está cadastrado nela no Apolo e se ela já não tem ambiente (nesse caso, está em <a href="#meus-ambientes">Meus ambientes</a>).</p></details>
+      <details><summary>Não encontro uma turma em Meus ambientes.</summary>
+        <p>Confira o período nos filtros ou clique em <span class="kbd2">Limpar</span>.</p></details>
+      <details><summary>Um aluno ainda não está no curso.</summary>
+        <p>A inscrição é automática: logo após a criação e, depois, toda madrugada enquanto o curso não terminou. Se ele se matriculou hoje, aparece amanhã.</p></details>
+      <details><summary>Um aluno cancelou, mas continua no curso.</summary>
+        <p>A sincronização não retira alunos. Remova-o em <b>Participantes</b>, se necessário.</p></details>
+      <details><summary>Quero mudar o nome ou a descrição do curso.</summary>
+        <p>Esses dados vêm do Apolo e ficam travados no Moodle. Corrija-os no Apolo ou procure o suporte.</p></details>
+      <details><summary>Esqueci de marcar um ministrante.</summary>
+        <p>Inscreva-o como professor em <b>Participantes</b>.</p></details>
+      <details><summary>Fui levado direto a um curso ao clicar em Criar ambiente.</summary>
+        <p>Outra pessoa já tinha criado o ambiente dessa turma.</p></details>
+    </section>
+
+    <section id="glossario">
+      <h2>Glossário</h2><div class="linha"></div>
+      <div class="tabela-rolavel">
+      <table class="tab">
+        <tr><th>Termo</th><th>Significado</th></tr>
+        <tr><td>Apolo</td><td>Sistema da USP com os cursos de Cultura e Extensão, turmas, ministrantes e alunos.</td></tr>
+        <tr><td>Turma</td><td>Oferecimento de uma atividade, com código no Apolo (ex.: 140435).</td></tr>
+        <tr><td>Ambiente</td><td>O curso no Moodle de uma turma.</td></tr>
+        <tr><td>Responsável / ministrante</td><td>Quem atua na turma, conforme o Apolo.</td></tr>
+        <tr><td>Gerente de categoria</td><td>Quem gerencia a categoria de uma unidade no Moodle.</td></tr>
+        <tr><td>Período adicional</td><td>Tempo extra de acesso após o fim da turma.</td></tr>
+      </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer><a href="https://cursosextensao.usp.br">cursosextensao.usp.br</a> · Equipe Moodle USP</footer>
+
+<script>
+  (function () {
+    var raiz = document.documentElement, chave = 'tutorial-extensao-tema';
+    try { var t = localStorage.getItem(chave); if (t) raiz.setAttribute('data-theme', t); } catch (e) {}
+    document.getElementById('tema').addEventListener('click', function () {
+      var escuro = raiz.getAttribute('data-theme') === 'dark' ||
+        (!raiz.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var novo = escuro ? 'light' : 'dark';
+      raiz.setAttribute('data-theme', novo);
+      try { localStorage.setItem(chave, novo); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>
