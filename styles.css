@@ -1,0 +1,117 @@
+/*
+ * Estilos das páginas do bloco Extensão (ambientes.php e turma.php).
+ * Cores sincronizadas com o tema theme_extensao2 (theme/extensao2/style/moodle.css):
+ *   azul-petróleo #0d94ab (header, links), âmbar #FFB500 (destaques, btn-primary),
+ *   texto #1d2125. Tudo fica restrito aos containers das páginas, pois o Moodle
+ *   carrega este arquivo em todas as páginas.
+ */
+
+.block-extensao-ambientes,
+.block-extensao-turma {
+    --ext-primaria: #0d94ab;
+    --ext-primaria-escura: #0b7d91;
+    --ext-primaria-clara: rgb(13 148 171 / 10%);
+    --ext-destaque: #FFB500;
+    --ext-texto: #1d2125;
+    color: var(--ext-texto);
+}
+
+/* Tabelas */
+.block-extensao-ambientes .ext-tabela,
+.block-extensao-turma .ext-tabela {
+    background-color: #fff;
+    margin-bottom: 0;
+}
+
+.block-extensao-ambientes .ext-tabela thead th,
+.block-extensao-turma .ext-tabela thead th {
+    background-color: var(--ext-primaria);
+    border-color: var(--ext-primaria-escura);
+    color: #fff;
+    font-weight: 500;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.block-extensao-ambientes .ext-tabela thead tr,
+.block-extensao-turma .ext-tabela thead tr {
+    border-bottom: 3px solid var(--ext-destaque);
+}
+
+.block-extensao-ambientes .ext-tabela.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: var(--ext-primaria-clara);
+    background-color: var(--ext-primaria-clara);
+}
+
+.block-extensao-ambientes .ext-tabela.table-hover > tbody > tr:hover > *,
+.block-extensao-turma .ext-tabela.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: rgb(255 181 0 / 12%);
+    background-color: rgb(255 181 0 / 12%);
+}
+
+.block-extensao-ambientes .ext-tabela td {
+    vertical-align: top;
+}
+
+/* Cards (turma.php) */
+.block-extensao-turma .ext-card {
+    border-color: #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.block-extensao-turma .ext-card-header {
+    background-color: var(--ext-primaria);
+    border-top: 5px solid var(--ext-destaque);
+    border-bottom: none;
+    color: #fff;
+}
+
+.block-extensao-turma .ext-rotulo {
+    color: var(--ext-primaria-escura);
+    letter-spacing: 0.02em;
+}
+
+/* Botões fora do btn-primary (que o tema já pinta de âmbar) */
+.block-extensao-ambientes .btn-ext-outline,
+.block-extensao-turma .btn-ext-outline {
+    color: var(--ext-primaria);
+    border-color: var(--ext-primaria);
+    background-color: transparent;
+}
+
+.block-extensao-ambientes .btn-ext-outline:hover,
+.block-extensao-ambientes .btn-ext-outline:focus,
+.block-extensao-turma .btn-ext-outline:hover,
+.block-extensao-turma .btn-ext-outline:focus {
+    color: #fff;
+    background-color: var(--ext-primaria);
+    border-color: var(--ext-primaria);
+}
+
+.block-extensao-ambientes .btn-primary,
+.block-extensao-turma .btn-primary {
+    color: var(--ext-texto);
+}
+
+/* Ícones e códigos */
+.block-extensao-ambientes .ext-icone,
+.block-extensao-turma .ext-icone {
+    color: var(--ext-primaria);
+}
+
+.block-extensao-ambientes a.ext-logar-como .ext-icone:hover {
+    color: var(--ext-destaque);
+}
+
+.block-extensao-turma .ext-codpes {
+    color: var(--ext-texto);
+    font-family: inherit;
+    font-weight: 500;
+}
+
+/* Filtros (ambientes.php): rótulos alinhados e campos ocupando a coluna */
+.block-extensao-ambientes form .form-label {
+    display: block;
+    margin-bottom: 0.25rem;
+}

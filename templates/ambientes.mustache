@@ -4,54 +4,64 @@
         <div class="col-12">
             <form method="get" action="{{url_acao}}" class="row g-2 align-items-end">
 
-                <div class="col-md-4">
+                <div class="col-md-2 col-lg-auto">
+                    <label for="unidade" class="form-label">Unidade</label>
+                    <select id="unidade" name="unidade" class="form-select w-100">
+                        <option value="" {{#filtro_unidade_todas}}selected{{/filtro_unidade_todas}}>Todas</option>
+                        {{#unidades}}
+                        <option value="{{valor}}" {{#selecionada}}selected{{/selecionada}}>{{valor}}</option>
+                        {{/unidades}}
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-lg">
                     <label for="search" class="form-label">Nome do curso</label>
                     <input
                         type="text"
                         id="search"
                         name="search"
-                        class="form-control"
+                        class="form-control w-100"
                         placeholder="Buscar nome do curso..."
                         value="{{valor_busca}}">
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 col-lg-auto">
                     <label for="datainicio" class="form-label">Data inicial</label>
                     <input
                         type="date"
                         id="datainicio"
                         name="datainicio"
-                        class="form-control"
+                        class="form-control w-100"
                         value="{{datainicio}}"
                         required>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 col-lg-auto">
                     <label for="datafim" class="form-label">Data final</label>
                     <input
                         type="date"
                         id="datafim"
                         name="datafim"
-                        class="form-control"
+                        class="form-control w-100"
                         value="{{datafim}}"
                         required>
                 </div>
 
-                <div class="col-md-1">
+                <div class="col-md-2 col-lg-auto">
                     <label for="filtro_moodle" class="form-label">Moodle</label>
-                    <select id="filtro_moodle" name="filtro_moodle" class="form-select">
+                    <select id="filtro_moodle" name="filtro_moodle" class="form-select w-100">
                         <option value="" {{#filtro_moodle_todos}}selected{{/filtro_moodle_todos}}>Todos</option>
                         <option value="com" {{#filtro_moodle_com}}selected{{/filtro_moodle_com}}>Criado</option>
                         <option value="sem" {{#filtro_moodle_sem}}selected{{/filtro_moodle_sem}}>Não criado</option>
                     </select>
                 </div>
 
-                <div class="col-md-2 d-flex gap-2">
-                    <button class="btn btn-primary" type="submit">
+                <div class="col-md-2 col-lg-auto d-flex gap-2">
+                    <button class="btn btn-primary text-nowrap" type="submit">
                         <i class="fa fa-search"></i> Buscar
                     </button>
 
-                    <a href="{{url_acao}}" class="btn btn-outline-secondary">
+                    <a href="{{url_acao}}" class="btn btn-ext-outline">
                         Limpar
                     </a>
                 </div>
@@ -61,8 +71,8 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
+        <table class="table table-striped table-hover ext-tabela">
+            <thead>
                 <tr>
                     <th>Unidade</th>
                     <th>Curso (Apolo)</th>
@@ -90,8 +100,8 @@
                                 {{#responsaveis}}
                                     <li>
                                         {{#url_logar_como}}
-                                            <a href="{{url_logar_como}}" title="Logar como este usuário" aria-label="Logar como {{nome}}"
-                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user small"></i></a>
+                                            <a href="{{url_logar_como}}" class="ext-logar-como" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user ext-icone small"></i></a>
                                         {{/url_logar_como}}
                                         {{^url_logar_como}}<i class="fa fa-user text-muted small"></i>{{/url_logar_como}}
                                         {{nome}}
@@ -111,8 +121,8 @@
                                 {{#ministrantes}}
                                     <li>
                                         {{#url_logar_como}}
-                                            <a href="{{url_logar_como}}" title="Logar como este usuário" aria-label="Logar como {{nome}}"
-                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user small"></i></a>
+                                            <a href="{{url_logar_como}}" class="ext-logar-como" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user ext-icone small"></i></a>
                                         {{/url_logar_como}}
                                         {{^url_logar_como}}<i class="fa fa-user text-muted small"></i>{{/url_logar_como}}
                                         {{nome}}
@@ -127,13 +137,13 @@
                     </td>
                     <td>
                         {{#id_moodle}}
-                            <a href="{{wwwroot}}/course/view.php?id={{id_moodle}}">
-                                Acessar
+                            <a href="{{wwwroot}}/course/view.php?id={{id_moodle}}" class="btn btn-sm btn-ext-outline text-nowrap">
+                                <i class="fa fa-external-link"></i> Acessar
                             </a>
                         {{/id_moodle}}
 
                         {{^id_moodle}}
-                            <a href="{{url_criar}}" class="btn btn-sm btn-success">
+                            <a href="{{url_criar}}" class="btn btn-sm btn-primary text-nowrap">
                                 <i class="fa fa-plus"></i> Criar ambiente
                             </a>
                         {{/id_moodle}}
@@ -141,7 +151,7 @@
                     <td>{{data_inicio}}</td>
                     <td>{{data_fim}}</td>
                     <td>
-                        <a href="{{wwwroot}}/blocks/extensao/pages/turma.php?codofeatvceu={{codofeatvceu}}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{wwwroot}}/blocks/extensao/pages/turma.php?codofeatvceu={{codofeatvceu}}" class="btn btn-sm btn-ext-outline text-nowrap">
                             <i class="fa fa-eye"></i> Detalhes
                         </a>
                     </td>

@@ -35,14 +35,14 @@ $PAGE->set_heading($is_admin ? 'Painel de Administração de Ambientes - Apolo/M
 $search = optional_param('search', '', PARAM_TEXT);
 if (!empty($search)) $pageurl->param('search', $search);
 
-// data início no formato desde 1 de Jan como padrão
+// data início padrão: 1 de janeiro do ano anterior
 $datainicio = optional_param('datainicio', '', PARAM_TEXT);
-if (empty($datainicio)) $datainicio = date('Y-01-01');
+if (empty($datainicio)) $datainicio = (date('Y') - 1) . '-01-01';
 $datainicio_ts = strtotime($datainicio . ' 00:00:00');
 
-// data fim como padrão na data de hoje
+// data fim padrão: 31 de dezembro do próximo ano
 $datafim = optional_param('datafim', '', PARAM_TEXT);
-if (empty($datafim)) $datafim = date('Y-m-d');
+if (empty($datafim)) $datafim = (date('Y') + 1) . '-12-31';
 $datafim_ts = strtotime($datafim . ' 23:59:59');
 
 $filtro_moodle = optional_param('filtro_moodle', '', PARAM_ALPHA);
@@ -85,11 +85,32 @@ if ($filtro_moodle === 'com') {
 }
 
 // Não admin: restringe às turmas em que o usuário é responsável/ministrante
+$where_permitidas = '1=1';
+$params_permitidas = [];
 if (!$is_admin) {
     list($in_permitidas, $params_permitidas) = $DB->get_in_or_equal($turmas_permitidas, SQL_PARAMS_NAMED, 'permitida');
-    $where .= " AND codofeatvceu $in_permitidas";
+    $where_permitidas = "codofeatvceu $in_permitidas";
+    $where .= " AND $where_permitidas";
     $params += $params_permitidas;
 }
+
+// Filtro por unidade: opções = unidades existentes na tabela (para não admin,
+// só as unidades das turmas dele)
+$unidades = $DB->get_fieldset_sql(
+    "SELECT DISTINCT sglund FROM {block_extensao_turma}
+      WHERE $where_permitidas AND sglund IS NOT NULL AND sglund <> ''
+   ORDER BY sglund",
+    $params_permitidas
+);
+$filtro_unidade = optional_param('unidade', '', PARAM_TEXT);
+if (!in_array($filtro_unidade, $unidades, true)) $filtro_unidade = '';
+if ($filtro_unidade !== '') {
+    $where .= " AND sglund = :unidade";
+    $params['unidade'] = $filtro_unidade;
+}
+$opcoes_unidade = array_map(function ($u) use ($filtro_unidade) {
+    return ['valor' => $u, 'selecionada' => $u === $filtro_unidade];
+}, $unidades);
 
 // Busca os registros ordenando pelo código da oferta de forma decrescente
 $registros = $DB->get_records_select(
@@ -207,6 +228,8 @@ echo $OUTPUT->render_from_template('block_extensao/ambientes', [
     'filtro_moodle_todos' => empty($filtro_moodle),
     'filtro_moodle_com'   => $filtro_moodle === 'com',
     'filtro_moodle_sem'   => $filtro_moodle === 'sem',
+    'unidades'            => $opcoes_unidade,
+    'filtro_unidade_todas' => $filtro_unidade === '',
 ]);
 
 echo $OUTPUT->footer();
