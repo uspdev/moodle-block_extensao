@@ -1,27 +1,82 @@
-<h5>Cursos disponíveis para criação</h5>
+{{!
+    @template block_extensao/extensao_block
 
-{{#sem_cursos}}
-  <p>Nenhum curso foi encontrado.</p>
-{{/sem_cursos}}
+    Bloco com os cursos aguardando criação de ambiente.
+    Com até 5 cursos mostra a lista; com mais, adiciona a busca e limita a altura.
+}}
+<div class="block-extensao-bloco" id="block-extensao-{{uniqid}}">
 
-{{^sem_cursos}}
-  {{#formulario_em_lista}}
-    {{#cursos_docente}}
-      <div class="card">
-        <div class="card-body">
-          {{{ formulario_curso }}}
-        </div>  
-      </div>
-    {{/cursos_docente}} 
-  {{/formulario_em_lista}}
-  
-  {{^formulario_em_lista}}
-    {{{formulario}}}
-  {{/formulario_em_lista}}
-{{/sem_cursos}}
+    <div class="ext-bloco-titulo">
+        <span>Cursos aguardando criação</span>
+        {{^sem_cursos}}<span class="ext-bloco-total" title="{{total}} curso(s)">{{total}}</span>{{/sem_cursos}}
+    </div>
 
-{{#pode_ver_ambientes}}
-  <a href="{{url_ambientes}}" class="btn btn-primary btn-block">
-    <i class="fa fa-cogs"></i> {{#is_admin}}Gerenciar Ambientes{{/is_admin}}{{^is_admin}}Meus Ambientes{{/is_admin}}
-  </a>
-{{/pode_ver_ambientes}}
+    {{#sem_cursos}}
+        <p class="ext-bloco-vazio-geral">Nenhum curso aguardando criação de ambiente.</p>
+    {{/sem_cursos}}
+
+    {{^sem_cursos}}
+        {{#com_busca}}
+            <div class="ext-bloco-busca">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <input type="search" class="form-control form-control-sm"
+                       placeholder="Filtrar por nome ou código"
+                       aria-label="Filtrar cursos por nome ou código">
+            </div>
+        {{/com_busca}}
+
+        <ul class="ext-bloco-lista{{#com_busca}} ext-bloco-rolagem{{/com_busca}}">
+            {{#cursos}}
+            <li class="ext-bloco-item" data-busca="{{busca}}">
+                <div class="ext-bloco-nome" title="{{nome}}">{{nome}}</div>
+                <div class="ext-bloco-meta">
+                    <span>{{codofeatvceu}}</span>
+                    <span><i class="fa fa-calendar" aria-hidden="true"></i> {{inicio}} – {{fim}}</span>
+                </div>
+                <a href="{{url_criar}}" class="btn btn-primary btn-sm ext-bloco-criar">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Criar ambiente
+                </a>
+            </li>
+            {{/cursos}}
+        </ul>
+
+        {{#com_busca}}
+            <p class="ext-bloco-nenhum" hidden>Nenhum curso encontrado.</p>
+        {{/com_busca}}
+    {{/sem_cursos}}
+
+    {{#pode_ver_ambientes}}
+        <a href="{{url_ambientes}}" class="btn btn-sm ext-bloco-ambientes w-100">
+            <i class="fa fa-list" aria-hidden="true"></i>
+            {{#is_admin}}Gerenciar ambientes{{/is_admin}}{{^is_admin}}Meus ambientes{{/is_admin}}
+        </a>
+    {{/pode_ver_ambientes}}
+</div>
+
+{{#com_busca}}
+{{#js}}
+(function() {
+    var raiz = document.getElementById('block-extensao-{{uniqid}}');
+    if (!raiz) { return; }
+    var campo = raiz.querySelector('.ext-bloco-busca input');
+    var itens = raiz.querySelectorAll('.ext-bloco-item');
+    var nenhum = raiz.querySelector('.ext-bloco-nenhum');
+    var normalizar = function(texto) {
+        return (texto || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    };
+    var dados = Array.prototype.map.call(itens, function(item) {
+        return {item: item, texto: normalizar(item.getAttribute('data-busca'))};
+    });
+    campo.addEventListener('input', function() {
+        var termos = normalizar(campo.value).split(/\s+/).filter(Boolean);
+        var visiveis = 0;
+        dados.forEach(function(d) {
+            var mostra = termos.every(function(t) { return d.texto.indexOf(t) !== -1; });
+            d.item.hidden = !mostra;
+            if (mostra) { visiveis++; }
+        });
+        nenhum.hidden = visiveis > 0;
+    });
+})();
+{{/js}}
+{{/com_busca}}

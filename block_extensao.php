@@ -51,35 +51,47 @@ class block_extensao extends block_base {
             $cursos = [];
             $categorias = [];
         }
-        // TRUE se tiver 5 ou menos cursos
-        $formulario_em_lista = (count($cursos) <= 5);
+        // Lista de cursos aguardando criação de ambiente. Cada curso vira um
+        // cartão com botão "Criar ambiente", que leva ao fluxo de criação
+        // (criar_ambiente.php?turma=...; a permissão é checada lá).
+        $lista_cursos = [];
+        if (!empty($cursos)) {
+            global $DB;
+            $turmas = $DB->get_records_list('block_extensao_turma', 'codofeatvceu', array_keys($cursos));
+            foreach ($turmas as $turma) {
+                if (!empty($turma->id_moodle)) continue;
+                $nome = trim(str_replace(["\r", "\n"], ' ', $turma->nome_curso_apolo));
+                if (!empty($turma->nomatvceu) && $turma->nomatvceu != $turma->nome_curso_apolo) {
+                    $nome .= ' - ' . trim($turma->nomatvceu);
+                }
+                $inicio = !empty($turma->dtainiofeatv) ? userdate($turma->dtainiofeatv, '%d/%m/%Y') : '-';
+                $fim    = !empty($turma->dtafimofeatv) ? userdate($turma->dtafimofeatv, '%d/%m/%Y') : '-';
+                $lista_cursos[] = [
+                    'codofeatvceu' => $turma->codofeatvceu,
+                    'nome'         => format_string($nome),
+                    'inicio'       => $inicio,
+                    'fim'          => $fim,
+                    'ordem'        => (int) $turma->dtainiofeatv,
+                    // texto usado pelo filtro de busca (JS)
+                    'busca'        => s(core_text::strtolower($nome . ' ' . $turma->codofeatvceu . ' ' . $turma->sglund)),
+                    'url_criar'    => (new moodle_url('/blocks/extensao/pages/criar_ambiente.php', [
+                        'turma'   => $turma->codofeatvceu,
+                        'sesskey' => sesskey(),
+                    ]))->out(false),
+                ];
+            }
+            // Os que começam antes aparecem primeiro
+            usort($lista_cursos, function ($a, $b) { return $a['ordem'] <=> $b['ordem']; });
+        }
 
         // informacoes que serao enviadas ao template
         $infos = array(
-            'sem_cursos'          => empty($cursos),
-            'formulario_em_lista' => $formulario_em_lista
+            'sem_cursos' => empty($lista_cursos),
+            'cursos'     => $lista_cursos,
+            'total'      => count($lista_cursos),
+            // Com muitos cursos, mostra a busca e limita a altura da lista
+            'com_busca'  => count($lista_cursos) > 5,
         );
-
-        // formulario dinamico
-        if ($formulario_em_lista) {
-            // se for em lista, precisa criar um formulario para cada turma
-            $cursos_docente = array();
-            foreach ($cursos as $codofeatvceu => $nome_curso) {
-                // cria um formulario
-                $formurl = new moodle_url('/blocks/extensao/pages/criar_ambiente.php');
-                $form = new \block_extensao\form\redirecionamento_criacao_ambiente_lista($formurl, array('codofeatvceu' => $codofeatvceu)); 
-                $cursos_docente[] = array(
-                    'formulario_curso' => $form->render()
-                );
-            }
-            $infos['cursos_docente'] = $cursos_docente;
-        }
-        // Formulario como select
-        else {
-            $formurl = new moodle_url('/blocks/extensao/pages/criar_ambiente.php');
-            $formulario = new \block_extensao\form\redirecionamento_criacao_ambiente_select($formurl, array('cursos'=>$cursos));
-            $infos['formulario'] = $formulario->render();
-        }
 
         // Estratégia para capturamos se usuário é admin e usarmos no mustache para mostrar mais opções
         $context = context_system::instance();

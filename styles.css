@@ -115,3 +115,131 @@
     display: block;
     margin-bottom: 0.25rem;
 }
+
+/* Bloco (block_extensao.php / extensao_block.mustache) */
+.block-extensao-bloco {
+    --ext-primaria: #0d94ab;
+    --ext-primaria-escura: #0b7d91;
+    --ext-primaria-clara: rgb(13 148 171 / 8%);
+    --ext-destaque: #FFB500;
+    --ext-texto: #1d2125;
+    color: var(--ext-texto);
+}
+
+.block-extensao-bloco .ext-bloco-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 3px solid var(--ext-destaque);
+}
+
+.block-extensao-bloco .ext-bloco-total {
+    background-color: var(--ext-primaria);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0.3rem 0.55rem;
+}
+
+.block-extensao-bloco .ext-bloco-vazio-geral,
+.block-extensao-bloco .ext-bloco-nenhum {
+    color: #6a737b;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.block-extensao-bloco .ext-bloco-busca {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.block-extensao-bloco .ext-bloco-busca .fa {
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ext-primaria);
+    pointer-events: none;
+}
+
+.block-extensao-bloco .ext-bloco-busca input {
+    padding-left: 1.9rem;
+}
+
+.block-extensao-bloco .ext-bloco-busca input:focus {
+    border-color: var(--ext-primaria);
+    box-shadow: 0 0 0 0.2rem rgb(13 148 171 / 25%);
+}
+
+.block-extensao-bloco .ext-bloco-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem;
+}
+
+.block-extensao-bloco .ext-bloco-rolagem {
+    max-height: 22rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.block-extensao-bloco .ext-bloco-item {
+    border: 1px solid #dee2e6;
+    border-left: 4px solid var(--ext-primaria);
+    border-radius: 0.375rem;
+    background-color: #fff;
+    padding: 0.6rem 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.block-extensao-bloco .ext-bloco-item:hover {
+    background-color: var(--ext-primaria-clara);
+}
+
+.block-extensao-bloco .ext-bloco-item[hidden] {
+    display: none;
+}
+
+.block-extensao-bloco .ext-bloco-nome {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.block-extensao-bloco .ext-bloco-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.78rem;
+    color: #6a737b;
+    margin: 0.3rem 0 0.5rem;
+}
+
+.block-extensao-bloco .ext-bloco-meta .fa {
+    color: var(--ext-primaria);
+}
+
+.block-extensao-bloco .ext-bloco-criar {
+    color: var(--ext-texto);
+}
+
+.block-extensao-bloco .ext-bloco-ambientes {
+    color: var(--ext-primaria);
+    border: 1px solid var(--ext-primaria);
+    background-color: transparent;
+}
+
+.block-extensao-bloco .ext-bloco-ambientes:hover,
+.block-extensao-bloco .ext-bloco-ambientes:focus {
+    color: #fff;
+    background-color: var(--ext-primaria);
+}
