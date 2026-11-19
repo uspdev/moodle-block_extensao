@@ -26,7 +26,7 @@ if (!has_capability('moodle/site:config', $context)) {
             "codofeatvceu = :codturma AND $where_usuario", ['codturma' => $codofeatvceu] + $params_usuario);
     }
     if (!$permitido) {
-        throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+        throw new moodle_exception('nopermissions', 'error', '', 'ver esta turma (você não é responsável, ministrante ou gerente da unidade dela)');
     }
 }
 

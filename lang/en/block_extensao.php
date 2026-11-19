@@ -29,4 +29,4 @@ $string['cursos_disponiveis_help'] = 'Important! The courses listed below are re
 
 // Course Description
 $string['descricao_curso'] = 'Course Description';
-$string['descricao_curso_help'] = 'Insert a brief description of your course, visible to both students and visitors.';
+$string['descricao_curso_help'] = 'The description comes from the course objective registered in Apolo and cannot be changed in Moodle. It is visible to both students and visitors.';

@@ -53,5 +53,11 @@ function xmldb_block_extensao_upgrade($versaoAnterior) {
         upgrade_plugin_savepoint(true, 2026062601, 'block', 'extensao');
     }
 
+    if ($oldversion < 2026111900) {
+        // Trava campos das configurações dos cursos já criados pelo plugin.
+        \block_extensao\local\TravaCurso::aplicar_todos();
+        upgrade_plugin_savepoint(true, 2026111900, 'block', 'extensao');
+    }
+
     return true;
 }

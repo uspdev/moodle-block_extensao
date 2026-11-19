@@ -1,5 +1,7 @@
 # Cursos de Extensão USP
 
+> Tutorial para usuários (responsáveis, ministrantes e gerentes de categoria): [docs/index.html](docs/index.html)
+
 O plugin possui as seguintes configurações:
 - Credenciais da base de dados (Apolo):
     - Host;

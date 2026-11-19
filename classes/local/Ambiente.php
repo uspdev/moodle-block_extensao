@@ -69,6 +69,9 @@ class Ambiente {
   
     // se der certo, eh necessario salvar isso na base
     Turmas::atualizar_id_moodle_turma($info_forms->codofeatvceu, $moodle_curso->id);
+
+    // trava nome, nome breve, categoria, identificação e descrição (dados do Apolo)
+    TravaCurso::aplicar($moodle_curso->id);
     \core\notification::success('Ambiente criado com sucesso!');
 
     //// Task Ad-hoc para matricula os estudantes no curso
@@ -160,6 +163,18 @@ class Ambiente {
   }
 
   /**
+   * Converte o objetivo do curso (texto do Apolo) em HTML para a descricao.
+   *
+   * @param string $texto Texto do Apolo.
+   * @return string HTML.
+   */
+  public static function descricao_html ($texto) {
+    $texto = trim((string) $texto);
+    if ($texto === '') return '';
+    return '<p>' . nl2br(s($texto)) . '</p>';
+  }
+
+  /**
    * Cria um objeto de curso.
    * 
    * @param object $info_forms Valores passados atraves do formulario.
@@ -186,7 +201,9 @@ class Ambiente {
     if (isset($numsec_padrao))
       $curso->numsections = $numsec_padrao->value;
 
-    $curso->summary = $info_forms->summary['text']; 
+    // descricao: objetivo do curso no Apolo (nao editavel no formulario)
+    $turma = Turmas::info_turma_id_extensao($info_forms->codofeatvceu);
+    $curso->summary = self::descricao_html($turma->objcur ?? '');
     $curso->summaryformat = FORMAT_HTML;
 
     $curso->startdate = $info_forms->startdate;

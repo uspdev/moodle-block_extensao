@@ -29,4 +29,4 @@ $string['cursos_disponiveis_help'] = 'Importante! Os cursos listados abaixo est�
 
 // Descricao do curso
 $string['descricao_curso'] = 'Descrição do Curso';
-$string['descricao_curso_help'] = 'Insira uma breve descrição do seu curso, visível para alunos e visitantes.';
+$string['descricao_curso_help'] = 'A descrição vem do objetivo do curso cadastrado no Apolo e não pode ser alterada no Moodle. Ela fica visível para alunos e visitantes.';

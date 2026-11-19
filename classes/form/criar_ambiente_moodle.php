@@ -59,10 +59,10 @@ class criar_ambiente_moodle extends \moodleform {
     $end_date_element = $this->_form->getElement('enddate');
     $end_date_element->setLabel('Data do fim do curso <span style="color: #ff0000; font-weight: bold;">' . $first_enddate . '</span>');
 
-    // sumario (descricao) do curso
+    // sumario (descricao) do curso: vem do Apolo e nao pode ser alterado
+    // (Ambiente::criar_objeto_curso le o valor da base, nao do formulario)
     $summary = $this->define_campo('summary');
-    $this->_form->addElement('editor', 'summary', 'Descrição do curso')->setValue(array('text'=>$summary));
-    $this->_form->setType('summary', PARAM_RAW);
+    $this->_form->addElement('static', 'summary', 'Descrição do curso', \block_extensao\local\Ambiente::descricao_html($summary));
 
     // Adiciona o botao de ajuda ao campo  summary
     $this->_form->addHelpButton('summary', 'descricao_curso', 'block_extensao');

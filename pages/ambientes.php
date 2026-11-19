@@ -22,7 +22,7 @@ $filtro_usuario = null;
 if (!$is_admin) {
     $filtro_usuario = Turmas::filtro_sql_turmas_usuario($USER);
     if ($filtro_usuario === null) {
-        throw new required_capability_exception($context, 'moodle/site:config', 'nopermissions', '');
+        throw new moodle_exception('nopermissions', 'error', '', 'acessar o painel de ambientes (somente responsáveis, ministrantes e gerentes de categoria)');
     }
 }
 
