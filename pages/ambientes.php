@@ -175,6 +175,12 @@ if ($registros) {
             'sglund'             => $r->sglund,
             'nomatvceu'          => $r->nomatvceu,
             'id_moodle'          => $r->id_moodle,
+            // Admin vê todas as turmas e o não-admin só vê as próprias, então
+            // quem vê a linha pode criar. criar_ambiente.php valida de novo.
+            'url_criar'          => (new moodle_url('/blocks/extensao/pages/criar_ambiente.php', [
+                'turma'   => $r->codofeatvceu,
+                'sesskey' => sesskey(),
+            ]))->out(false),
             'data_inicio'        => !empty($r->dtainiofeatv) ? userdate($r->dtainiofeatv, '%d/%m/%Y') : '-',
             'data_fim'           => !empty($r->dtafimofeatv) ? userdate($r->dtafimofeatv, '%d/%m/%Y') : '-',
             'responsaveis'       => $responsaveis_formatados, // <-- Adicionado

@@ -133,7 +133,9 @@
                         {{/id_moodle}}
 
                         {{^id_moodle}}
-                            <span class="text-muted">Não criado</span>
+                            <a href="{{url_criar}}" class="btn btn-sm btn-success">
+                                <i class="fa fa-plus"></i> Criar ambiente
+                            </a>
                         {{/id_moodle}}
                     </td>
                     <td>{{data_inicio}}</td>

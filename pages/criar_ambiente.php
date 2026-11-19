@@ -19,6 +19,18 @@ use block_extensao\local\Ambiente;
 use block_extensao\local\Categorias;
 use block_extensao\local\Usuario;
 
+/**
+ * Quem pode criar o ambiente de uma turma: admin (qualquer turma),
+ * responsavel/ministrante da turma ou gerente da categoria da turma.
+ */
+$pode_criar = function ($codofeatvceu) use ($USER) {
+  $codofeatvceu = (int) $codofeatvceu;
+  if ($codofeatvceu <= 0) return false;
+  if (has_capability('moodle/site:config', context_system::instance())) return true;
+  return Turmas::usuario_docente_turma($USER->username, $codofeatvceu)
+      || Categorias::usuario_gerente_turma($USER->id, $codofeatvceu);
+};
+
  /*
 /**
  * Tratamento do formulario de criacao de curso
@@ -40,6 +52,13 @@ if (isset($_SESSION['codofeatvceu'])) {
   
   // se tiver algo, entao sao dados validados e pode criar o curso
   if ($info_forms) {
+    // O codofeatvceu vem de um campo hidden: precisa ser o mesmo da sessao
+    // e o usuario precisa poder criar o ambiente dessa turma
+    if ((int) $info_forms->codofeatvceu !== (int) $_SESSION['codofeatvceu'] || !$pode_criar($info_forms->codofeatvceu)) {
+      unset($_SESSION['codofeatvceu']);
+      \core\notification::error('A turma solicitada não está na sua lista de turmas!');
+      redirect(new moodle_url('/'));
+    }
     $novo_curso_id = Ambiente::criar_ambiente($info_forms, $ministrantes);
     unset($_SESSION['codofeatvceu']);
     // se der algum erro, manda para a pagina inicial
@@ -103,14 +122,37 @@ else if (!empty($info_forms_lista)) {
   // Caso contrario, salva
   $_SESSION['codofeatvceu'] = $codofeatvceu;
 }
+// Vindo do painel de ambientes (pages/ambientes.php): ?turma=...&sesskey=...
+else if (($turma_painel = optional_param('turma', 0, PARAM_INT)) && confirm_sesskey()) {
+  $codofeatvceu = $turma_painel;
+  $_SESSION['codofeatvceu'] = $codofeatvceu;
+}
 // Bloqueio do acesso direto
 else 
   redirect($CFG->wwwroot);
-  // Verifica se a turma enviada eh do usuario logado
-  if (!Turmas::usuario_docente_turma($USER->username, $codofeatvceu) && !Categorias::usuario_gerente_turma($USER->id, $codofeatvceu)) {
-    \core\notification::error('A turma solicitada não está na sua lista de turmas!');
-    redirect($_SERVER['HTTP_REFERER']);
-  }
+
+// Verifica se a turma enviada eh do usuario logado (ou se eh admin)
+$codofeatvceu = (int) $codofeatvceu;
+if (!$pode_criar($codofeatvceu)) {
+  unset($_SESSION['codofeatvceu']);
+  \core\notification::error('A turma solicitada não está na sua lista de turmas!');
+  redirect(new moodle_url('/'));
+}
+$_SESSION['codofeatvceu'] = $codofeatvceu;
+
+// A turma precisa existir na base sincronizada
+$turma_base = $DB->get_record('block_extensao_turma', ['codofeatvceu' => $codofeatvceu], 'codofeatvceu, id_moodle');
+if (!$turma_base) {
+  unset($_SESSION['codofeatvceu']);
+  \core\notification::error('Turma ' . $codofeatvceu . ' não encontrada na base.');
+  redirect(new moodle_url('/'));
+}
+
+// Se o ambiente ja foi criado, vai direto para ele
+if (!empty($turma_base->id_moodle)) {
+  unset($_SESSION['codofeatvceu']);
+  redirect(new moodle_url('/course/view.php', ['id' => $turma_base->id_moodle]), 'O ambiente desta turma já foi criado.');
+}
 
 /**
  * Visualizacao do formulario
