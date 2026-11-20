@@ -39,3 +39,12 @@ Percorre todas as turmas que já têm ambiente Moodle (`id_moodle` preenchido) c
     admin/cli/scheduled_task.php --execute="\\block_extensao\\task\\sincronizar_matriculados"
 
 Atenção: Quem cancelar a matrícula no Apolo **não** é desinscrito do curso no Moodle.
+
+## API pública: URL do curso de uma turma
+
+Não exige login. Dado o código da turma no Apolo (`codofeatvceu`), retorna a URL do curso no Moodle:
+
+    GET /blocks/extensao/api/curso.php?codofeatvceu=150627
+    {"url":"https://<moodle>/course/view.php?id=18"}
+
+Se a turma não existir, ainda não tiver ambiente criado ou o código for inválido, retorna `{"url":""}`.

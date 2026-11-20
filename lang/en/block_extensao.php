@@ -30,3 +30,8 @@ $string['cursos_disponiveis_help'] = 'Important! The courses listed below are re
 // Course Description
 $string['descricao_curso'] = 'Course Description';
 $string['descricao_curso_help'] = 'The description comes from the course objective registered in Apolo and cannot be changed in Moodle. It is visible to both students and visitors.';
+
+// Suporte (chamados)
+$string['extensao:atenderchamados'] = 'Handle support tickets of courses';
+$string['messageprovider:chamado'] = 'Updates on your support tickets';
+$string['messageprovider:chamado_novo'] = 'New support tickets in your unit';

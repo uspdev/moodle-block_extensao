@@ -30,3 +30,8 @@ $string['cursos_disponiveis_help'] = 'Importante! Os cursos listados abaixo est�
 // Descricao do curso
 $string['descricao_curso'] = 'Descrição do Curso';
 $string['descricao_curso_help'] = 'A descrição vem do objetivo do curso cadastrado no Apolo e não pode ser alterada no Moodle. Ela fica visível para alunos e visitantes.';
+
+// Suporte (chamados)
+$string['extensao:atenderchamados'] = 'Atender chamados de suporte dos cursos';
+$string['messageprovider:chamado'] = 'Atualizações dos seus chamados de suporte';
+$string['messageprovider:chamado_novo'] = 'Novos chamados de suporte da sua unidade';

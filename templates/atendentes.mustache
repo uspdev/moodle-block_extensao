@@ -1,0 +1,21 @@
+{{!
+    @template block_extensao/atendentes
+    Atendentes (gerentes) de cada unidade, agrupados por cidade.
+    Usado na aba Atendentes do Suporte e na página pública pages/atendentes.php.
+}}
+    <p class="ext-sup-total">Quem atende os chamados dos cursos de cada unidade.</p>
+    {{#cidades}}
+    <h3 class="ext-sup-cidade"><i class="fa fa-location-dot" aria-hidden="true"></i> {{cidade}}</h3>
+    <div class="ext-sup-unidades">
+        {{#unidades}}
+        <div class="ext-sup-unidade">
+            <h4>{{unidade}}</h4>
+            {{#atendentes.0}}
+            <ul>{{#atendentes}}<li><i class="fa fa-user" aria-hidden="true"></i> {{nome}}{{#email}}<br><a class="ext-sup-email" href="mailto:{{email}}">{{email}}</a>{{/email}}</li>{{/atendentes}}</ul>
+            {{/atendentes.0}}
+            {{^atendentes.0}}<p class="text-muted mb-0">Nenhum atendente cadastrado.</p>{{/atendentes.0}}
+        </div>
+        {{/unidades}}
+    </div>
+    {{/cidades}}
+    {{^cidades}}<div class="ext-sup-vazio">Nenhuma unidade encontrada.</div>{{/cidades}}

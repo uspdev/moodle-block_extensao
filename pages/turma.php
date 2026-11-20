@@ -50,6 +50,18 @@ if ($r) {
     $ministrantes_formatados = [];
     $matriculados_formatados = [];
 
+    // Somente o site admin pode "logar como" as pessoas da turma
+    $pode_logar_como = is_siteadmin();
+    $url_logar_como = function($codpes) use ($pode_logar_como, $codofeatvceu) {
+        if (!$pode_logar_como) return '';
+        return (new moodle_url('/blocks/extensao/pages/logar_como.php', [
+            'codpes'       => $codpes,
+            'codofeatvceu' => $codofeatvceu,
+            'voltar'       => 'turma',
+            'sesskey'      => sesskey(),
+        ]))->out(false);
+    };
+
     if ($ministrantes_raw) {
         foreach ($ministrantes_raw as $m) {
             $info_pessoa = format_string($m->codpes) . ' - ' . format_string($m->nompes);
@@ -57,10 +69,11 @@ if ($r) {
                 $info_pessoa .= ' (' . format_string($m->codema) . ')';
             }
 
+            $pessoa = ['nome' => $info_pessoa, 'url_logar_como' => $url_logar_como($m->codpes)];
             if ((int)$m->responsavel === 1) {
-                $responsaveis_formatados[] = ['nome' => $info_pessoa];
+                $responsaveis_formatados[] = $pessoa;
             } else {
-                $ministrantes_formatados[] = ['nome' => $info_pessoa];
+                $ministrantes_formatados[] = $pessoa;
             }
         }
     }
@@ -82,7 +95,8 @@ if ($r) {
                     'codpes' => $codpes,
                     'nome'   => format_string($m['nompes']),
                     'email'  => format_string($m['codema'] ?? ''),
-                    'texto'  => $codpes . ' - ' . format_string($m['nompes']) . $email
+                    'texto'  => $codpes . ' - ' . format_string($m['nompes']) . $email,
+                    'url_logar_como' => $url_logar_como($codpes),
                 ];
             }
         }

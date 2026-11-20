@@ -1,10 +1,11 @@
 <?php
 /**
- * "Logar como" um responsavel/ministrante a partir do painel de ambientes.
+ * "Logar como" um responsavel/ministrante ou aluno matriculado da turma,
+ * a partir do painel de ambientes ou da pagina da turma.
  * Restrito ao site admin. Se o usuario ainda nao existir no Moodle, a conta
  * eh criada (mesmo padrao dos alunos em Matriculados::cria_matriculados).
  *
- * Path: /blocks/extensao/pages/logar_como.php?codpes=...&codofeatvceu=...&sesskey=...
+ * Path: /blocks/extensao/pages/logar_como.php?codpes=...&codofeatvceu=...&sesskey=...[&voltar=turma]
  */
 
 require_once(__DIR__ . '/../../../config.php');
@@ -14,10 +15,11 @@ use block_extensao\local\Usuario;
 
 $codpes       = required_param('codpes', PARAM_INT);
 $codofeatvceu = required_param('codofeatvceu', PARAM_INT);
+$origem       = optional_param('voltar', '', PARAM_ALPHA);
 
 $context = context_system::instance();
 $PAGE->set_url(new moodle_url('/blocks/extensao/pages/logar_como.php', [
-    'codpes' => $codpes, 'codofeatvceu' => $codofeatvceu,
+    'codpes' => $codpes, 'codofeatvceu' => $codofeatvceu, 'voltar' => $origem,
 ]));
 $PAGE->set_context($context);
 
@@ -26,23 +28,43 @@ require_sesskey();
 
 // Apenas o site admin pode usar este recurso
 if (!is_siteadmin()) {
-    throw new moodle_exception('nopermissions', 'error', '', 'logar como responsável/ministrante');
+    throw new moodle_exception('nopermissions', 'error', '', 'logar como outro usuário');
 }
 
-$voltar = new moodle_url('/blocks/extensao/pages/ambientes.php');
+$voltar = $origem === 'turma'
+    ? new moodle_url('/blocks/extensao/pages/turma.php', ['codofeatvceu' => $codofeatvceu])
+    : new moodle_url('/blocks/extensao/pages/ambientes.php');
 
-// O codpes precisa ser responsavel/ministrante da turma informada
-$ministrante = $DB->get_record('block_extensao_ministrante', [
+// O codpes precisa ser responsavel/ministrante (tabela local) ou aluno
+// matriculado (Apolo) da turma informada
+$pessoa = $DB->get_record('block_extensao_ministrante', [
     'codpes'       => $codpes,
     'codofeatvceu' => $codofeatvceu,
-], '*', IGNORE_MULTIPLE);
-if (!$ministrante) {
-    redirect($voltar, 'Pessoa não encontrada entre os responsáveis/ministrantes desta turma.',
+], 'codpes, nompes, codema', IGNORE_MULTIPLE);
+if (!$pessoa) {
+    try {
+        $query = new \block_extensao\local\Service\Query();
+        $matriculados = array_map(fn($c) => (int) $c, $query->matriculados($codofeatvceu));
+        if (in_array($codpes, $matriculados, true)) {
+            $info = $query->informacoesUsuario([$codpes]);
+            $pessoa = (object) [
+                'codpes' => $codpes,
+                'nompes' => $info[0]['nompes'] ?? (string) $codpes,
+                'codema' => $info[0]['codema'] ?? '',
+            ];
+        }
+    } catch (\Throwable $e) {
+        redirect($voltar, 'Erro ao consultar os matriculados no Apolo: ' . $e->getMessage(),
+            null, \core\output\notification::NOTIFY_ERROR);
+    }
+}
+if (!$pessoa) {
+    redirect($voltar, 'Pessoa não encontrada entre os responsáveis, ministrantes ou matriculados desta turma.',
         null, \core\output\notification::NOTIFY_ERROR);
 }
 
 try {
-    $usuario = Usuario::obter_ou_criar_por_codpes($codpes, $ministrante->nompes, $ministrante->codema);
+    $usuario = Usuario::obter_ou_criar_por_codpes($codpes, $pessoa->nompes, $pessoa->codema);
 } catch (\Throwable $e) {
     redirect($voltar, 'Erro ao criar o usuário ' . $codpes . ': ' . $e->getMessage(),
         null, \core\output\notification::NOTIFY_ERROR);

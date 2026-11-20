@@ -7,7 +7,8 @@
  */
 
 .block-extensao-ambientes,
-.block-extensao-turma {
+.block-extensao-turma,
+.block-extensao-suporte {
     --ext-primaria: #0d94ab;
     --ext-primaria-escura: #0b7d91;
     --ext-primaria-clara: rgb(13 148 171 / 10%);
@@ -18,13 +19,15 @@
 
 /* Tabelas */
 .block-extensao-ambientes .ext-tabela,
-.block-extensao-turma .ext-tabela {
+.block-extensao-turma .ext-tabela,
+.block-extensao-suporte .ext-tabela {
     background-color: #fff;
     margin-bottom: 0;
 }
 
 .block-extensao-ambientes .ext-tabela thead th,
-.block-extensao-turma .ext-tabela thead th {
+.block-extensao-turma .ext-tabela thead th,
+.block-extensao-suporte .ext-tabela thead th {
     background-color: var(--ext-primaria);
     border-color: var(--ext-primaria-escura);
     color: #fff;
@@ -34,7 +37,8 @@
 }
 
 .block-extensao-ambientes .ext-tabela thead tr,
-.block-extensao-turma .ext-tabela thead tr {
+.block-extensao-turma .ext-tabela thead tr,
+.block-extensao-suporte .ext-tabela thead tr {
     border-bottom: 3px solid var(--ext-destaque);
 }
 
@@ -44,7 +48,8 @@
 }
 
 .block-extensao-ambientes .ext-tabela.table-hover > tbody > tr:hover > *,
-.block-extensao-turma .ext-tabela.table-hover > tbody > tr:hover > * {
+.block-extensao-turma .ext-tabela.table-hover > tbody > tr:hover > *,
+.block-extensao-suporte .ext-tabela.table-hover > tbody > tr:hover > * {
     --bs-table-accent-bg: rgb(255 181 0 / 12%);
     background-color: rgb(255 181 0 / 12%);
 }
@@ -74,7 +79,8 @@
 
 /* Botões fora do btn-primary (que o tema já pinta de âmbar) */
 .block-extensao-ambientes .btn-ext-outline,
-.block-extensao-turma .btn-ext-outline {
+.block-extensao-turma .btn-ext-outline,
+.block-extensao-suporte .btn-ext-outline {
     color: var(--ext-primaria);
     border-color: var(--ext-primaria);
     background-color: transparent;
@@ -83,14 +89,17 @@
 .block-extensao-ambientes .btn-ext-outline:hover,
 .block-extensao-ambientes .btn-ext-outline:focus,
 .block-extensao-turma .btn-ext-outline:hover,
-.block-extensao-turma .btn-ext-outline:focus {
+.block-extensao-turma .btn-ext-outline:focus,
+.block-extensao-suporte .btn-ext-outline:hover,
+.block-extensao-suporte .btn-ext-outline:focus {
     color: #fff;
     background-color: var(--ext-primaria);
     border-color: var(--ext-primaria);
 }
 
 .block-extensao-ambientes .btn-primary,
-.block-extensao-turma .btn-primary {
+.block-extensao-turma .btn-primary,
+.block-extensao-suporte .btn-primary {
     color: var(--ext-texto);
 }
 
@@ -100,7 +109,8 @@
     color: var(--ext-primaria);
 }
 
-.block-extensao-ambientes a.ext-logar-como .ext-icone:hover {
+.block-extensao-ambientes a.ext-logar-como .ext-icone:hover,
+.block-extensao-turma a.ext-logar-como .ext-icone:hover {
     color: var(--ext-destaque);
 }
 
@@ -233,7 +243,7 @@
 }
 
 .block-extensao-bloco .ext-bloco-ambientes {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: var(--ext-primaria);
     border: 1px solid var(--ext-primaria);
     background-color: transparent;
@@ -243,4 +253,300 @@
 .block-extensao-bloco .ext-bloco-ambientes:focus {
     color: #fff;
     background-color: var(--ext-primaria);
+}
+
+.block-extensao-bloco .ext-bloco-botoes {
+    margin-bottom: 1rem;
+}
+
+.block-extensao-bloco .ext-bloco-botoes:last-child,
+.block-extensao-bloco .ext-bloco-botoes .ext-bloco-ambientes:last-child {
+    margin-bottom: 0;
+}
+
+/* Suporte (suporte.php, chamado.php, chamado_novo.php) */
+.block-extensao-suporte .ext-sup-topo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.block-extensao-suporte .ext-sup-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    align-items: center;
+    flex: 1 1 520px;
+}
+
+.block-extensao-suporte .ext-sup-filtros input[type=search] {
+    flex: 1 1 220px;
+    width: auto;
+}
+
+.block-extensao-suporte .ext-sup-status {
+    display: flex;
+    gap: 0.25rem;
+    border: 1px solid var(--ext-primaria);
+    border-radius: 0.375rem;
+    padding: 2px;
+}
+
+.block-extensao-suporte .ext-sup-status label {
+    margin: 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    color: var(--ext-primaria);
+}
+
+.block-extensao-suporte .ext-sup-status input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.block-extensao-suporte .ext-sup-status label:has(input:checked) {
+    background-color: var(--ext-primaria);
+    color: #fff;
+}
+
+.block-extensao-suporte .ext-sup-status label:has(input:focus-visible) {
+    outline: 2px solid var(--ext-destaque);
+}
+
+.block-extensao-suporte .ext-sup-total {
+    color: #6a737b;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0.5rem;
+}
+
+.block-extensao-suporte .ext-sup-aberto {
+    background-color: var(--ext-destaque);
+    color: var(--ext-texto);
+}
+
+.block-extensao-suporte .ext-sup-fechado {
+    background-color: #6a737b;
+    color: #fff;
+}
+
+.block-extensao-suporte .ext-sup-vazio {
+    background: var(--ext-primaria-clara);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: #4b545c;
+    margin: 1rem 0;
+}
+
+.block-extensao-suporte .ext-sup-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 3px solid var(--ext-destaque);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.block-extensao-suporte .ext-sup-titulo {
+    margin: 0 0 0.4rem;
+}
+
+.block-extensao-suporte .ext-sup-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    align-items: center;
+}
+
+.block-extensao-suporte .ext-sup-meta .fa {
+    color: var(--ext-primaria);
+}
+
+.block-extensao-suporte .ext-sup-datas {
+    color: #6a737b;
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+.block-extensao-suporte .ext-sup-acoes {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.block-extensao-suporte .ext-sup-historico {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    border-left: 3px solid var(--ext-primaria-clara);
+}
+
+.block-extensao-suporte .ext-sup-evento {
+    position: relative;
+    margin: 0 0 1rem 1.25rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+}
+
+.block-extensao-suporte .ext-sup-evento::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.25rem - 8px);
+    top: 1rem;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--ext-primaria);
+    border: 2px solid #fff;
+}
+
+.block-extensao-suporte .ext-sup-do-suporte {
+    border-left: 4px solid var(--ext-destaque);
+}
+
+.block-extensao-suporte .ext-sup-do-solicitante {
+    border-left: 4px solid var(--ext-primaria);
+}
+
+.block-extensao-suporte .ext-sup-estado {
+    background: #f6f7f8;
+    padding: 0.5rem 1rem;
+}
+
+.block-extensao-suporte .ext-sup-evento-topo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.6rem;
+    align-items: baseline;
+}
+
+.block-extensao-suporte .ext-sup-papel {
+    font-size: 0.75rem;
+    border-radius: 999px;
+    padding: 0 0.5rem;
+    background: var(--ext-primaria-clara);
+    color: var(--ext-primaria-escura);
+}
+
+.block-extensao-suporte .ext-sup-data {
+    margin-left: auto;
+    color: #6a737b;
+    font-size: 0.85rem;
+}
+
+.block-extensao-suporte .ext-sup-mensagem {
+    margin-top: 0.5rem;
+    overflow-wrap: anywhere;
+}
+
+.block-extensao-suporte .ext-sup-mensagem img {
+    max-width: 100%;
+    height: auto;
+}
+
+.block-extensao-suporte .ext-sup-anexos {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.block-extensao-suporte .ext-sup-anexos a {
+    display: inline-block;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 0.2rem 0.6rem;
+    text-decoration: none;
+}
+
+.block-extensao-suporte .ext-sup-responder {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+}
+
+.block-extensao-suporte .ext-sup-unidades {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.block-extensao-suporte .ext-sup-unidade {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-top: 4px solid var(--ext-primaria);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.block-extensao-suporte .ext-sup-unidade h4 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+}
+
+.block-extensao-suporte .ext-sup-unidade ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.block-extensao-suporte .ext-sup-unidade .fa {
+    color: var(--ext-primaria);
+}
+
+.block-extensao-suporte .ext-sup-ha {
+  display: block;
+  font-size: .8em;
+  color: #6c757d;
+}
+
+.block-extensao-suporte .ext-sup-cidade {
+    font-size: 1.25rem;
+    margin: 1.25rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 3px solid var(--ext-destaque);
+}
+
+.block-extensao-suporte .ext-sup-cidade .fa {
+    color: var(--ext-primaria);
+}
+
+/* Chamado com o administrador (encaminhado pelo gerente) */
+.block-extensao-suporte .ext-sup-escalado {
+    background-color: #ca3120;
+    color: #fff;
+}
+
+.block-extensao-suporte .ext-sup-linha-escalado > td:first-child {
+    box-shadow: inset 4px 0 0 #ca3120;
+}
+
+.block-extensao-suporte .ext-sup-evento-escalado {
+    border-left-color: #ca3120 !important;
+}
+
+.block-extensao-suporte .ext-sup-contador {
+    display: inline-block;
+    min-width: 1.4em;
+    padding: 0 0.35em;
+    border-radius: 999px;
+    background: #ca3120;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.block-extensao-suporte .ext-sup-email {
+    font-size: 0.85rem;
+    margin-left: 1.3rem;
+    overflow-wrap: anywhere;
 }

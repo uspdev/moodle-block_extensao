@@ -1,0 +1,77 @@
+{{!
+    @template block_extensao/suporte
+    Lista de chamados de suporte (Meus chamados / Atendimento).
+}}
+<div class="block-extensao-suporte">
+
+    {{#tem_abas}}
+    <ul class="nav nav-tabs mb-3">
+        {{#abas}}
+        <li class="nav-item"><a class="nav-link {{#ativa}}active{{/ativa}}" href="{{url}}">{{nome}}</a></li>
+        {{/abas}}
+    </ul>
+    {{/tem_abas}}
+
+    {{#lista}}
+    <div class="ext-sup-topo">
+        <form method="get" action="{{url_acao}}" class="ext-sup-filtros">
+            <input type="hidden" name="aba" value="{{aba}}">
+            <div class="ext-sup-status" role="group" aria-label="Situação">
+                <label><input type="radio" name="status" value="abertos" {{#st_abertos}}checked{{/st_abertos}} onchange="this.form.submit()"> Abertos</label>
+                <label><input type="radio" name="status" value="aberto" {{#st_aberto}}checked{{/st_aberto}} onchange="this.form.submit()"> Com a unidade</label>
+                <label><input type="radio" name="status" value="escalado" {{#st_escalado}}checked{{/st_escalado}} onchange="this.form.submit()"> Com o administrador{{#n_escalados}} <span class="ext-sup-contador">{{n_escalados}}</span>{{/n_escalados}}</label>
+                <label><input type="radio" name="status" value="fechado" {{#st_fechado}}checked{{/st_fechado}} onchange="this.form.submit()"> Fechados</label>
+                <label><input type="radio" name="status" value="todos" {{#st_todos}}checked{{/st_todos}} onchange="this.form.submit()"> Todos</label>
+            </div>
+            <input type="search" name="busca" class="form-control" value="{{busca}}" placeholder="Buscar por título ou nº do chamado" aria-label="Buscar">
+            <button class="btn btn-ext-outline" type="submit"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+        </form>
+        <a href="{{url_novo}}" class="btn btn-primary text-nowrap"><i class="fa fa-plus" aria-hidden="true"></i> Novo chamado</a>
+    </div>
+
+    <p class="ext-sup-total">{{total}} chamado(s)</p>
+
+    {{#tem_linhas}}
+    <div class="table-responsive">
+        <table class="table table-hover ext-tabela">
+            <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Título</th>
+                    <th>Aberto por</th>
+                    <th>Unidade</th>
+                    <th>Curso</th>
+                    <th>Situação</th>
+                    <th>Aberto em</th>
+                    <th>Última atualização</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#linhas}}
+                <tr{{#escalado}} class="ext-sup-linha-escalado"{{/escalado}}>
+                    <td><a href="{{url}}">#{{id}}</a></td>
+                    <td><a href="{{url}}">{{titulo}}</a></td>
+                    <td>{{solicitante}}</td>
+                    <td>{{#unidade}}{{unidade}}{{/unidade}}{{^unidade}}<span class="text-muted">—</span>{{/unidade}}</td>
+                    <td>{{#url_curso}}<a href="{{url_curso}}">{{curso}}</a>{{/url_curso}}{{^url_curso}}{{#curso}}{{curso}}{{/curso}}{{^curso}}<span class="text-muted">—</span>{{/curso}}{{/url_curso}}</td>
+                    <td>{{#aberto}}<span class="badge ext-sup-aberto">Com a unidade</span>{{/aberto}}{{#escalado}}<span class="badge ext-sup-escalado">Com o administrador</span>{{/escalado}}{{#fechado}}<span class="badge ext-sup-fechado">Fechado</span>{{/fechado}}</td>
+                    <td class="text-nowrap">{{criado}}<span class="ext-sup-ha">{{criado_ha}}</span></td>
+                    <td class="text-nowrap">{{atualizado}}<span class="ext-sup-ha">{{atualizado_ha}}</span></td>
+                </tr>
+                {{/linhas}}
+            </tbody>
+        </table>
+    </div>
+    {{{paginacao}}}
+    {{/tem_linhas}}
+
+    {{^tem_linhas}}
+    <div class="ext-sup-vazio">Nenhum chamado encontrado.</div>
+    {{/tem_linhas}}
+    {{/lista}}
+
+    {{#aba_atendentes}}
+    {{> block_extensao/atendentes }}
+    {{#url_publica}}<p class="ext-sup-total mt-3"><i class="fa fa-link" aria-hidden="true"></i> Versão pública desta lista (sem e-mails): <a href="{{url_publica}}">{{url_publica}}</a></p>{{/url_publica}}
+    {{/aba_atendentes}}
+</div>

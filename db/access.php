@@ -26,4 +26,16 @@ $capabilities = array(
 
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+
+    // Atender (ver, comentar, fechar, reabrir) chamados de suporte dos cursos.
+    // Gerentes de categoria a recebem por herança em todos os cursos da
+    // categoria e subcategorias.
+    'block/extensao:atenderchamados' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
+        ),
+    ),
 );

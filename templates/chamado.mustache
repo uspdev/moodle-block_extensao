@@ -1,0 +1,75 @@
+{{!
+    @template block_extensao/chamado
+    Um chamado: dados, histórico e ações.
+}}
+<div class="block-extensao-suporte">
+
+    <div class="ext-sup-cabecalho">
+        <div>
+            <h3 class="ext-sup-titulo">{{titulo}}</h3>
+            <div class="ext-sup-meta">
+                {{#aberto}}{{#escalado}}<span class="badge ext-sup-escalado">Com o administrador</span>{{/escalado}}{{^escalado}}<span class="badge ext-sup-aberto">Com a unidade</span>{{/escalado}}{{/aberto}}
+                {{^aberto}}<span class="badge ext-sup-fechado">Fechado</span>{{/aberto}}
+                <span><i class="fa fa-user" aria-hidden="true"></i> {{solicitante}}</span>
+                {{#unidade}}<span><i class="fa fa-building" aria-hidden="true"></i> {{unidade}}</span>{{/unidade}}
+                <span><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    {{#curso}}<a href="{{url_curso}}">{{curso}}</a>{{/curso}}{{^curso}}Não é referente a nenhum curso{{/curso}}</span>
+            </div>
+            <div class="ext-sup-datas">
+                Aberto em {{criado}} ({{criado_ha}}) · Última atualização {{atualizado}} ({{atualizado_ha}}){{#fechado}} · Fechado em {{fechado}}{{/fechado}}
+            </div>
+        </div>
+        <div class="ext-sup-acoes">
+            <a href="{{url_voltar}}" class="btn btn-ext-outline"><i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar</a>
+            {{#pode_devolver}}
+            <form method="post" action="{{url_acao}}">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                <input type="hidden" name="acao" value="devolver">
+                <button type="submit" class="btn btn-ext-outline"><i class="fa fa-reply" aria-hidden="true"></i> Devolver à unidade</button>
+            </form>
+            {{/pode_devolver}}
+            <form method="post" action="{{url_acao}}">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                {{#aberto}}
+                <input type="hidden" name="acao" value="fechar">
+                <button type="submit" class="btn btn-ext-outline"><i class="fa fa-check" aria-hidden="true"></i> Fechar chamado</button>
+                {{/aberto}}
+                {{^aberto}}
+                <input type="hidden" name="acao" value="reabrir">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-rotate-left" aria-hidden="true"></i> Reabrir chamado</button>
+                {{/aberto}}
+            </form>
+        </div>
+    </div>
+
+    <ol class="ext-sup-historico">
+        {{#historico}}
+        <li class="ext-sup-evento {{#solicitante}}ext-sup-do-solicitante{{/solicitante}}{{^solicitante}}ext-sup-do-suporte{{/solicitante}} {{#estado}}ext-sup-estado{{/estado}} {{#tipo_encaminhamento}}ext-sup-evento-escalado{{/tipo_encaminhamento}}">
+            <div class="ext-sup-evento-topo">
+                <b>{{autor}}</b>
+                <span class="ext-sup-papel">{{#solicitante}}Solicitante{{/solicitante}}{{^solicitante}}Suporte{{/solicitante}}</span>
+                <span>{{acao}}</span>
+                <span class="ext-sup-data">{{data}}</span>
+            </div>
+            {{#mensagem}}<div class="ext-sup-mensagem">{{{mensagem}}}</div>{{/mensagem}}
+            {{#anexos.0}}
+            <ul class="ext-sup-anexos">
+                {{#anexos}}
+                <li><a href="{{url}}"><i class="fa {{#pdf}}fa-file-pdf{{/pdf}}{{^pdf}}fa-file-image{{/pdf}}" aria-hidden="true"></i> {{nome}}</a></li>
+                {{/anexos}}
+            </ul>
+            {{/anexos.0}}
+        </li>
+        {{/historico}}
+    </ol>
+
+    {{#aberto}}
+    <div class="ext-sup-responder">
+        <h4>Responder</h4>
+        {{{formulario}}}
+    </div>
+    {{/aberto}}
+    {{^aberto}}
+    <div class="ext-sup-vazio">Chamado fechado. Para continuar a conversa, reabra o chamado.</div>
+    {{/aberto}}
+</div>

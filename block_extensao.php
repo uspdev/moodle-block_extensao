@@ -102,6 +102,11 @@ class block_extensao extends block_base {
         $infos['pode_ver_ambientes'] = $infos['is_admin']
             || (isloggedin() && !isguestuser() && Turmas::filtro_sql_turmas_usuario($USER) !== null);
 
+        // Suporte: qualquer usuário logado pode abrir chamados
+        if (isloggedin() && !isguestuser()) {
+            $infos['url_suporte'] = (new moodle_url('/blocks/extensao/pages/suporte.php'))->out(false);
+        }
+
         // Link para página de gerencia de ambientes
         $infos['url_ambientes'] = (new moodle_url('/blocks/extensao/pages/ambientes.php'))->out(false);
 

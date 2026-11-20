@@ -53,10 +53,27 @@ function xmldb_block_extensao_upgrade($versaoAnterior) {
         upgrade_plugin_savepoint(true, 2026062601, 'block', 'extensao');
     }
 
-    if ($oldversion < 2026111900) {
+    if ($versaoAnterior < 2026111900) {
         // Trava campos das configurações dos cursos já criados pelo plugin.
         \block_extensao\local\TravaCurso::aplicar_todos();
         upgrade_plugin_savepoint(true, 2026111900, 'block', 'extensao');
+    }
+
+    if ($versaoAnterior < 2026111901) {
+        // Chamados de suporte.
+        foreach (['block_extensao_chamado', 'block_extensao_chamado_evento'] as $tabela) {
+            if (!$dbman->table_exists($tabela)) {
+                $dbman->install_one_table_from_xmldb_file(__DIR__ . '/install.xml', $tabela);
+            }
+        }
+        upgrade_plugin_savepoint(true, 2026111901, 'block', 'extensao');
+    }
+
+    if ($versaoAnterior < 2026111903) {
+        // Chamados sem curso são atendidos só pelo admin ("Com o administrador").
+        $DB->set_field_select('block_extensao_chamado', 'status', 'escalado',
+            "courseid = 0 AND status = 'aberto'");
+        upgrade_plugin_savepoint(true, 2026111903, 'block', 'extensao');
     }
 
     return true;

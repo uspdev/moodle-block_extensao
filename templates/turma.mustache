@@ -72,7 +72,8 @@
                         <ul class="list-group list-group-flush border-top">
                             {{#responsaveis}}
                                 <li class="list-group-item px-0 py-2">
-                                    <i class="fa fa-user ext-icone me-2"></i> {{nome}}
+                                    {{#url_logar_como}}<a href="{{url_logar_como}}" class="ext-logar-como" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                       onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user ext-icone me-2"></i></a>{{/url_logar_como}}{{^url_logar_como}}<i class="fa fa-user ext-icone me-2"></i>{{/url_logar_como}} {{nome}}
                                 </li>
                             {{/responsaveis}}
                         </ul>
@@ -88,7 +89,8 @@
                         <ul class="list-group list-group-flush border-top">
                             {{#ministrantes}}
                                 <li class="list-group-item px-0 py-2">
-                                    <i class="fa fa-user ext-icone me-2"></i> {{nome}}
+                                    {{#url_logar_como}}<a href="{{url_logar_como}}" class="ext-logar-como" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                       onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user ext-icone me-2"></i></a>{{/url_logar_como}}{{^url_logar_como}}<i class="fa fa-user ext-icone me-2"></i>{{/url_logar_como}} {{nome}}
                                 </li>
                             {{/ministrantes}}
                         </ul>
@@ -120,7 +122,11 @@
                                 <tbody>
                                     {{#matriculados}}
                                     <tr>
-                                        <td><span class="ext-codpes">{{codpes}}</span></td>
+                                        <td>
+                                            {{#url_logar_como}}<a href="{{url_logar_como}}" class="ext-logar-como" title="Logar como este usuário" aria-label="Logar como {{nome}}"
+                                               onclick="return confirm('Logar como este usuário? Você sairá da sua sessão de administrador.');"><i class="fa fa-user ext-icone me-1"></i></a>{{/url_logar_como}}
+                                            <span class="ext-codpes">{{codpes}}</span>
+                                        </td>
                                         <td>{{nome}}</td>
                                         <td>{{email}}</td>
                                         {{#tem_curso_moodle}}
